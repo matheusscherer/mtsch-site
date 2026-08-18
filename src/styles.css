@@ -12,9 +12,14 @@
   --color-device: #141414;
   --color-device-edge: #2a2a2a;
   --color-chart: #d8d8d8;
+  --color-lime: #d5ff40;
+  --color-bio: #0b0d0a;
+  --color-bio-card: #141614;
+  --color-bio-mist: #c0c2b8;
 
   --font-sans: "Manrope", ui-sans-serif, system-ui, sans-serif;
   --font-display: "Syne", ui-sans-serif, system-ui, sans-serif;
+  --font-bio: "Poppins", ui-sans-serif, system-ui, sans-serif;
 
   --radius-xs: 4px;
   --radius-sm: 8px;

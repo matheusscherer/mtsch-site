@@ -1,70 +1,91 @@
-import { ArrowUpRight } from "lucide-react";
+import { ArrowUpRight, Dumbbell, Flame, Timer } from "lucide-react";
 import { Link } from "@tanstack/react-router";
 import { bioLinks, bioPrimary, bioProfile } from "@/lib/bio";
 
+const stats = [
+  { icon: Flame, label: "Foco", value: "Diário" },
+  { icon: Dumbbell, label: "Treino", value: "Rotina" },
+  { icon: Timer, label: "Resposta", value: "24h" },
+];
+
 export function BioPage() {
   return (
-    <main className="relative isolate min-h-svh w-full overflow-x-clip bg-bg px-5 py-10 text-fg">
-      <div className="pointer-events-none absolute inset-0 -z-10 overflow-hidden">
-        <img src="/bio-bg.jpg" alt="" className="h-full w-full object-cover object-center opacity-70" />
-        <div className="absolute inset-0 bg-linear-to-b from-bg/50 via-bg/70 to-bg" />
-      </div>
+    <main className="font-bio min-h-svh w-full overflow-x-clip bg-bio px-4 py-8 text-fg">
+      <div className="mx-auto flex w-full max-w-sm flex-col">
+        <header className="flex items-center gap-4">
+          <div
+            className="flex size-16 shrink-0 items-center justify-center rounded-full bg-lime font-semibold text-bio"
+            aria-hidden
+          >
+            MS
+          </div>
+          <div className="min-w-0">
+            <h1 className="text-lg font-semibold tracking-tight">{bioProfile.name}</h1>
+            <p className="text-sm text-lime">{bioProfile.handle}</p>
+          </div>
+        </header>
 
-      <div className="mx-auto flex w-full max-w-sm flex-col items-center text-center">
-        <div
-          className="flex size-24 items-center justify-center rounded-full border border-line-strong bg-bg-elevated font-display text-2xl font-semibold tracking-[0.12em]"
-          aria-hidden
-        >
-          MS
-        </div>
-        <h1 className="font-display mt-5 text-2xl font-semibold tracking-tight">{bioProfile.name}</h1>
-        <p className="mt-1 text-sm tracking-[0.16em] text-muted uppercase">{bioProfile.handle}</p>
-        <p className="mt-4 text-sm leading-relaxed text-fg-soft">{bioProfile.promise}</p>
+        <p className="mt-5 text-sm leading-relaxed text-bio-mist">{bioProfile.promise}</p>
 
         <a
           href={bioPrimary.href}
-          className="mt-8 flex min-h-12 w-full items-center justify-center rounded-full border border-fg bg-fg px-6 text-sm font-medium text-bg transition-colors duration-200 hover:bg-fg-soft"
+          className="mt-6 flex min-h-12 items-center justify-center rounded-full bg-lime px-5 text-sm font-semibold text-bio"
         >
           {bioPrimary.label}
         </a>
 
-        <p className="mt-6 text-xs tracking-wide text-muted">Porto Alegre · resposta em até 1 dia útil</p>
+        <div className="mt-6 grid grid-cols-3 gap-2">
+          {stats.map((item) => (
+            <div
+              key={item.label}
+              className="rounded-xl border border-line bg-bio-card px-2 py-3 text-center"
+            >
+              <item.icon className="mx-auto size-4 text-lime" strokeWidth={1.75} />
+              <p className="mt-2 text-xs font-semibold text-fg">{item.value}</p>
+              <p className="text-[0.65rem] text-bio-mist">{item.label}</p>
+            </div>
+          ))}
+        </div>
 
-        <ul className="mt-8 flex w-full flex-col gap-3">
-          {bioLinks.map((item) =>
-            item.external ? (
+        <p className="mt-8 text-xs font-semibold tracking-[0.16em] text-bio-mist uppercase">
+          Atalhos
+        </p>
+        <ul className="mt-3 flex flex-col gap-2">
+          {bioLinks.map((item) => {
+            const inner = (
+              <>
+                <span className="min-w-0">
+                  <span className="block text-sm font-medium text-fg">{item.title}</span>
+                  <span className="mt-0.5 block text-xs text-bio-mist">{item.hint}</span>
+                </span>
+                <span className="flex size-9 shrink-0 items-center justify-center rounded-full bg-lime/15 text-lime">
+                  <ArrowUpRight className="size-4" />
+                </span>
+              </>
+            );
+
+            const className =
+              "flex min-h-16 items-center justify-between gap-3 rounded-xl border border-line bg-bio-card px-4";
+
+            return (
               <li key={item.title}>
-                <a
-                  href={item.href}
-                  target="_blank"
-                  rel="noreferrer"
-                  className="flex min-h-14 items-center justify-between rounded-xl border border-line bg-bg-elevated/80 px-4 text-left backdrop-blur-sm transition-colors duration-200 hover:border-line-strong"
-                >
-                  <span>
-                    <span className="block text-sm font-medium text-fg">{item.title}</span>
-                    <span className="mt-0.5 block text-xs text-muted">{item.hint}</span>
-                  </span>
-                  <ArrowUpRight className="size-4 shrink-0 text-muted" />
-                </a>
+                {item.external ? (
+                  <a href={item.href} target="_blank" rel="noreferrer" className={className}>
+                    {inner}
+                  </a>
+                ) : (
+                  <Link to={item.href} className={className}>
+                    {inner}
+                  </Link>
+                )}
               </li>
-            ) : (
-              <li key={item.title}>
-                <Link
-                  to={item.href}
-                  className="flex min-h-14 items-center justify-between rounded-xl border border-line bg-bg-elevated/80 px-4 text-left backdrop-blur-sm transition-colors duration-200 hover:border-line-strong"
-                >
-                  <span>
-                    <span className="block text-sm font-medium text-fg">{item.title}</span>
-                    <span className="mt-0.5 block text-xs text-muted">{item.hint}</span>
-                  </span>
-                  <ArrowUpRight className="size-4 shrink-0 text-muted" />
-                </Link>
-              </li>
-            ),
-          )}
+            );
+          })}
         </ul>
 
-        <p className="mt-10 text-[0.68rem] tracking-[0.18em] text-muted uppercase">MTSCH / mtscfit</p>
+        <p className="mt-8 text-center text-[0.65rem] tracking-[0.18em] text-bio-mist uppercase">
+          mtscfit
+        </p>
       </div>
     </main>
   );
