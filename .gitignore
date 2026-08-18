@@ -16,3 +16,4 @@ tmp
 coverage
 *.tsbuildinfo
 attachments
+.project_id
