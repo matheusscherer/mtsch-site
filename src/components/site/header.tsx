@@ -2,18 +2,10 @@ import { useEffect, useState } from "react";
 import { Menu, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { brand, navItems } from "@/lib/site";
-import { cn, scrollToId } from "@/lib/utils";
+import { scrollToId } from "@/lib/utils";
 
 export function Header() {
-  const [scrolled, setScrolled] = useState(false);
   const [open, setOpen] = useState(false);
-
-  useEffect(() => {
-    const onScroll = () => setScrolled(window.scrollY > 12);
-    onScroll();
-    window.addEventListener("scroll", onScroll, { passive: true });
-    return () => window.removeEventListener("scroll", onScroll);
-  }, []);
 
   useEffect(() => {
     document.body.style.overflow = open ? "hidden" : "";
@@ -29,14 +21,7 @@ export function Header() {
   }
 
   return (
-    <header
-      className={cn(
-        "fixed inset-x-0 top-0 z-50 transition-[background-color,border-color,backdrop-filter] duration-300",
-        scrolled || open
-          ? "border-b border-line bg-bg/80 backdrop-blur-xl"
-          : "border-b border-transparent bg-transparent",
-      )}
-    >
+    <header className="sticky top-0 z-50 border-b border-line bg-bg/90 backdrop-blur-xl">
       <div className="mx-auto flex h-16 max-w-6xl items-center justify-between px-5 sm:h-[4.5rem] sm:px-6">
         <a
           href="#topo"

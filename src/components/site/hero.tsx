@@ -7,7 +7,7 @@ export function Hero() {
   return (
     <section
       id="topo"
-      className="relative isolate w-full max-w-full overflow-x-clip bg-bg pt-20 sm:pt-24 md:flex md:min-h-svh md:flex-col"
+      className="relative isolate w-full max-w-full overflow-x-clip bg-bg md:flex md:min-h-[calc(100svh-4.5rem)] md:flex-col"
     >
       <div className="pointer-events-none absolute inset-0 -z-10 overflow-hidden">
         <img
