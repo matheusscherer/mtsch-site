@@ -4,7 +4,7 @@ import { brand, socials } from "@/lib/site";
 
 export function Footer() {
   return (
-    <footer className="border-t border-line bg-bg pb-20 md:pb-0">
+    <footer className="border-t border-line bg-bg">
       <div className="mx-auto flex max-w-6xl flex-col gap-6 px-5 py-8 sm:flex-row sm:items-center sm:justify-between sm:px-6">
         <div>
           <p className="font-display text-sm font-semibold tracking-[0.2em] text-fg">{brand.name}</p>

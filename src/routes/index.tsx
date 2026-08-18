@@ -4,7 +4,6 @@ import { Hero } from "@/components/site/hero";
 import { Cases, Method, ProofBar, Services } from "@/components/site/sections";
 import { Contact } from "@/components/site/contact";
 import { Footer } from "@/components/site/footer";
-import { MobileCta } from "@/components/site/mobile-cta";
 
 export const Route = createFileRoute("/")({ component: Home });
 
@@ -21,7 +20,6 @@ function Home() {
         <Contact />
       </main>
       <Footer />
-      <MobileCta />
     </div>
   );
 }

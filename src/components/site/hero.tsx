@@ -19,7 +19,7 @@ export function Hero() {
         <div className="absolute inset-0 bg-linear-to-b from-bg/30 via-transparent to-bg" />
       </div>
 
-      <div className="relative mx-auto flex w-full max-w-5xl flex-col items-center px-5 pt-4 pb-28 text-center sm:px-6 sm:pt-8 md:flex-1 md:pb-40">
+      <div className="relative mx-auto flex w-full max-w-5xl flex-col items-center px-5 pt-4 pb-16 text-center sm:px-6 sm:pt-8 sm:pb-20 md:flex-1 md:pb-40">
         <p className="rise-in text-micro font-medium text-muted uppercase">
           — Soluções escaláveis em Python —
         </p>
