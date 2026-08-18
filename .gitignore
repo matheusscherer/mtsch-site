@@ -1,0 +1,17 @@
+node_modules
+dist
+.vercel
+.nitro
+.output
+.tanstack
+*.log
+.env
+.env.*
+!.env.example
+.DS_Store
+screenshots
+artifacts
+tmp
+/tmp
+coverage
+*.tsbuildinfo
