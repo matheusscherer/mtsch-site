@@ -16,10 +16,16 @@
   --color-bio: #0b0d0a;
   --color-bio-card: #141614;
   --color-bio-mist: #c0c2b8;
+  --color-ivory: #f6f1ea;
+  --color-champagne: #ece3d6;
+  --color-gold: #b8956a;
+  --color-ink: #2a2218;
+  --color-stone: #8a7d6e;
 
   --font-sans: "Manrope", ui-sans-serif, system-ui, sans-serif;
   --font-display: "Syne", ui-sans-serif, system-ui, sans-serif;
   --font-bio: "Poppins", ui-sans-serif, system-ui, sans-serif;
+  --font-serif: "Cormorant Garamond", "Times New Roman", serif;
 
   --radius-xs: 4px;
   --radius-sm: 8px;
