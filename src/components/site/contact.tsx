@@ -5,6 +5,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { submitLead } from "@/lib/leads";
+import { brand } from "@/lib/site";
 
 export function Contact() {
   const [pending, setPending] = useState(false);
@@ -33,10 +34,10 @@ export function Contact() {
   }
 
   return (
-    <section id="contato" className="scroll-mt-24 border-t border-line bg-bg px-5 py-24 sm:px-6">
-      <div className="mx-auto grid max-w-6xl gap-14 lg:grid-cols-[1fr_1.1fr] lg:gap-20">
+    <section id="contato" className="scroll-mt-24 border-t border-line bg-bg px-5 py-20 sm:px-6 sm:py-24">
+      <div className="mx-auto grid max-w-6xl gap-12 lg:grid-cols-[1fr_1.1fr] lg:gap-20">
         <div>
-          <p className="text-[0.68rem] tracking-[0.24em] text-muted uppercase">Contato</p>
+          <p className="text-micro text-muted uppercase">Contato</p>
           <h2 className="font-display mt-3 text-title font-semibold text-fg">
             Consultoria gratuita. Sem pitch de 40 slides.
           </h2>
@@ -44,7 +45,15 @@ export function Contact() {
             Conte o processo que está te custando tempo. Respondemos com um recorte honesto: o que
             automatizar primeiro, o que deixar quieto.
           </p>
-          <p className="mt-8 text-sm text-fg-soft">Porto Alegre · atendimento remoto no Brasil</p>
+          <ul className="mt-8 space-y-2 text-sm text-fg-soft">
+            <li>Resposta em até 1 dia útil</li>
+            <li>Porto Alegre · remoto no Brasil</li>
+            <li>
+              <a className="underline decoration-line underline-offset-4 hover:text-fg" href={`mailto:${brand.email}`}>
+                {brand.email}
+              </a>
+            </li>
+          </ul>
         </div>
 
         <form onSubmit={onSubmit} className="rounded-xl border border-line bg-bg-elevated p-6 sm:p-8">

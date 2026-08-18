@@ -3,6 +3,7 @@ export const brand = {
   line: "Dados & Automação",
   lockup: "MTSCH / Dados & Automação",
   city: "Porto Alegre",
+  email: "contatomatheusscherer@gmail.com",
 };
 
 export const navItems = [

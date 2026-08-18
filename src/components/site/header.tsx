@@ -17,6 +17,7 @@ export function Header() {
 
   useEffect(() => {
     document.body.style.overflow = open ? "hidden" : "";
+    document.body.style.overflowX = open ? "hidden" : "clip";
     return () => {
       document.body.style.overflow = "";
     };

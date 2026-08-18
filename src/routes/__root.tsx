@@ -12,7 +12,7 @@ export const Route = createRootRoute({
   head: () => ({
     meta: [
       { charSet: "utf-8" },
-      { name: "viewport", content: "width=device-width, initial-scale=1" },
+      { name: "viewport", content: "width=device-width, initial-scale=1, viewport-fit=cover" },
       { title: APP_NAME },
       {
         name: "description",
@@ -50,7 +50,7 @@ export const Route = createRootRoute({
       <head>
         <HeadContent />
       </head>
-      <body className="bg-bg text-fg">
+      <body className="w-full max-w-full overflow-x-clip bg-bg text-fg">
         <PreviewHostBridge />
         <AuthProvider>
           <Outlet />

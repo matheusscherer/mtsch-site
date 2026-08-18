@@ -65,25 +65,25 @@ function Stat({ k, v }: { k: string; v: string }) {
   return (
     <div className="px-6 py-8 sm:px-10">
       <p className="font-display text-2xl font-semibold tracking-tight text-fg">{k}</p>
-      <p className="mt-2 text-sm text-muted">{v}</p>
+      <p className="mt-2 max-w-xs text-sm text-muted">{v}</p>
     </div>
   );
 }
 
 export function Services() {
   return (
-    <section id="servicos" className="scroll-mt-24 bg-bg px-5 py-24 sm:px-6">
+    <section id="servicos" className="scroll-mt-24 bg-bg px-5 py-20 sm:px-6 sm:py-24">
       <div className="mx-auto max-w-6xl">
         <SectionHead
           kicker="Serviços"
           title="Do processo sujo ao sistema que fatura."
           copy="Três frentes. Um critério: se não reduz trabalho repetido ou não aumenta receita, não entra."
         />
-        <div className="mt-14 grid gap-4 md:grid-cols-3">
+        <div className="mt-12 grid gap-3 md:grid-cols-3">
           {services.map((item) => (
             <article
               key={item.title}
-              className="rounded-xl border border-line bg-bg-elevated p-6 sm:p-7"
+              className="rounded-xl border border-line bg-bg-elevated p-6 transition-[border-color] duration-200 hover:border-line-strong sm:p-7"
             >
               <item.icon className="size-5 text-fg-soft" strokeWidth={1.5} />
               <h3 className="font-display mt-6 text-lg font-semibold text-fg">{item.title}</h3>
@@ -98,7 +98,7 @@ export function Services() {
 
 export function Method() {
   return (
-    <section className="border-y border-line bg-bg-elevated px-5 py-20 sm:px-6">
+    <section className="border-y border-line bg-bg-elevated px-5 py-16 sm:px-6 sm:py-20">
       <div className="mx-auto max-w-6xl">
         <SectionHead kicker="Método" title="Rápido. Claro. Sem teatro." />
         <div className="mt-12 grid gap-8 sm:grid-cols-2 lg:grid-cols-4">
@@ -117,23 +117,21 @@ export function Method() {
 
 export function Cases() {
   return (
-    <section id="projetos" className="scroll-mt-24 bg-bg px-5 py-24 sm:px-6">
+    <section id="projetos" className="scroll-mt-24 bg-bg px-5 py-20 sm:px-6 sm:py-24">
       <div className="mx-auto max-w-6xl">
         <SectionHead
           kicker="Projetos"
           title="Cases que pagam o próprio projeto."
-          copy="Recortes reais do tipo de operação que construímos — do comercial ao chão de fábrica."
+          copy="Recortes do tipo de operação que construímos — do comercial ao chão de fábrica."
         />
-        <div className="mt-14 grid gap-4 lg:grid-cols-3">
+        <div className="mt-12 grid gap-3 lg:grid-cols-3">
           {cases.map((item) => (
             <article
               key={item.title}
-              className="group flex flex-col rounded-xl border border-line bg-bg-elevated p-6 sm:p-7"
+              className="group flex flex-col rounded-xl border border-line bg-bg-elevated p-6 transition-[border-color] duration-200 hover:border-line-strong sm:p-7"
             >
               <div className="flex items-center justify-between">
-                <span className="text-[0.68rem] tracking-[0.18em] text-muted uppercase">
-                  {item.tag}
-                </span>
+                <span className="text-micro text-muted uppercase">{item.tag}</span>
                 <ArrowUpRight className="size-4 text-muted transition-transform duration-200 group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
               </div>
               <h3 className="font-display mt-6 text-xl font-semibold text-fg">{item.title}</h3>
@@ -163,7 +161,7 @@ function SectionHead({
 }) {
   return (
     <div className="max-w-2xl">
-      <p className="text-[0.68rem] tracking-[0.24em] text-muted uppercase">{kicker}</p>
+      <p className="text-micro text-muted uppercase">{kicker}</p>
       <h2 className="font-display mt-3 text-title font-semibold text-fg">{title}</h2>
       {copy ? <p className="mt-4 text-sm leading-relaxed text-muted sm:text-base">{copy}</p> : null}
     </div>

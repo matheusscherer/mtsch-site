@@ -41,6 +41,9 @@
     scroll-behavior: smooth;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
+    overflow-x: clip;
+    width: 100%;
+    max-width: 100%;
   }
 
   html,
@@ -53,6 +56,11 @@
 
   body {
     font-family: var(--font-sans);
+    overflow-x: clip;
+    width: 100%;
+    max-width: 100%;
+    overscroll-behavior-x: none;
+    touch-action: pan-y;
   }
 
   button:not(:disabled),
@@ -76,18 +84,6 @@
   }
 }
 
-@keyframes smoke-drift {
-  0% {
-    transform: scale(1.02) translate3d(0, 0, 0);
-  }
-  50% {
-    transform: scale(1.08) translate3d(1.4%, -1.2%, 0);
-  }
-  100% {
-    transform: scale(1.02) translate3d(0, 0, 0);
-  }
-}
-
 @keyframes rise-in {
   from {
     opacity: 0;
@@ -101,10 +97,6 @@
   }
 }
 
-.smoke-layer {
-  animation: smoke-drift 32s ease-in-out infinite;
-}
-
 .rise-in {
   animation: rise-in 700ms var(--ease-smooth-out) both;
 }
@@ -114,7 +106,6 @@
     scroll-behavior: auto;
   }
 
-  .smoke-layer,
   .rise-in {
     animation: none;
   }
