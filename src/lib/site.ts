@@ -4,8 +4,8 @@ export const brand = {
   lockup: "MTSCH / Dados & Automação",
   city: "Porto Alegre",
   email: "contatomatheusscherer@gmail.com",
-  /** E.164 sem +. Ex.: 5551999887766 — manda o número que eu plugo. */
-  whatsapp: "",
+  /** E.164 sem +. */
+  whatsapp: "5551999709357",
 };
 
 export const navItems = [

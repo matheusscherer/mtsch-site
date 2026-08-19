@@ -1,6 +1,7 @@
 import { Github, Linkedin } from "lucide-react";
 import { Link } from "@tanstack/react-router";
 import { brand, socials } from "@/lib/site";
+import { hasWhatsapp, whatsappIntro, whatsappUrl } from "@/lib/whatsapp";
 
 export function Footer() {
   return (
