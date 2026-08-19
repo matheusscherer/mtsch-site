@@ -56,7 +56,7 @@ export function Contact() {
         emailSent: res.emailSent,
         slots: res.slots,
       });
-      toast.success(`Lead ${res.temperature}. Escolhe um horário.`);
+      toast.success("Recebi. Quando a gente olha isso?");
     } catch (err) {
       const raw = err instanceof Error ? err.message : "";
       const friendly = raw.includes("automatizar")
@@ -102,7 +102,7 @@ export function Contact() {
             automatizar primeiro, o que deixar quieto.
           </p>
           <ul className="mt-8 space-y-2 text-sm text-fg-soft">
-            <li>Três horários na hora. 30 min.</li>
+            <li>A gente olha o processo e te diz o primeiro corte.</li>
             <li>Porto Alegre · remoto no Brasil</li>
             <li>
               <a
@@ -123,13 +123,17 @@ export function Contact() {
             </h3>
             <p className="mt-3 text-sm leading-relaxed text-muted">
               {result.booked
-                ? "Horário reservado. Abre no Google Agenda para confirmar o convite."
-                : "Escolhe um horário. 30 min, sem pitch."}
+                ? "Combinado. Confirma no teu Calendar — senão o horário não trava."
+                : result.temperature === "quente"
+                  ? "Cabe ainda hoje. Qual janela funciona?"
+                  : result.temperature === "morno"
+                    ? "Quando dá para olhar esse processo juntos?"
+                    : "Se quiser conversar, marca. Sem pressa."}
             </p>
 
             {result.booked ? (
               <div className="mt-8">
-                <p className="text-sm text-fg">Reservado: {result.booked.label}</p>
+                <p className="text-sm text-fg">{result.booked.label} — recorte do processo</p>
                 <Button asChild className="mt-4">
                   <a href={result.booked.calendarUrl} target="_blank" rel="noreferrer">
                     Abrir no Google Agenda
@@ -138,7 +142,7 @@ export function Contact() {
               </div>
             ) : (
               <div className="mt-8">
-                <p className="text-micro text-muted uppercase">Três opções</p>
+                <p className="text-micro text-muted uppercase">Quando conversamos</p>
                 <div className="mt-3 grid gap-2">
                   {result.slots.map((slot) => (
                     <Button
@@ -150,8 +154,8 @@ export function Contact() {
                       onClick={() => void pickSlot(slot)}
                     >
                       <span>{slot.label}</span>
-                      <span className="text-xs tracking-[0.14em] uppercase opacity-70">
-                        {booking === slot.start ? "…" : "30 min"}
+                      <span className="text-xs tracking-[0.14em] text-muted uppercase">
+                        {booking === slot.start ? "…" : slot.period}
                       </span>
                     </Button>
                   ))}

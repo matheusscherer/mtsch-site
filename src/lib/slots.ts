@@ -2,6 +2,7 @@ export type MeetingSlot = {
   start: string;
   end: string;
   label: string;
+  period: "manhã" | "tarde";
 };
 
 const HOURS = [10, 14, 16] as const;
@@ -53,6 +54,7 @@ export function proposeSlots(now = new Date(), count = 3): MeetingSlot[] {
           start: start.toISOString(),
           end: end.toISOString(),
           label: formatSlot(start),
+          period: hour < 12 ? "manhã" : "tarde",
         });
         if (slots.length >= count) return slots;
       }
@@ -65,6 +67,17 @@ export function proposeSlots(now = new Date(), count = 3): MeetingSlot[] {
 
 export function formatSlotLabel(iso: string): string {
   return formatSlot(new Date(iso));
+}
+
+export function periodOf(iso: string): "manhã" | "tarde" {
+  const hour = Number(
+    new Intl.DateTimeFormat("en-GB", {
+      timeZone: "America/Sao_Paulo",
+      hour: "numeric",
+      hour12: false,
+    }).format(new Date(iso)),
+  );
+  return hour < 12 ? "manhã" : "tarde";
 }
 
 export function isOfferedSlot(iso: string, now = new Date()): boolean {

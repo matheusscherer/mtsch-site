@@ -38,7 +38,7 @@ export function meetingCalendarUrl(input: {
     start: input.start,
     end: input.end,
     details: [
-      `Consultoria 30 min · ${brand.lockup}`,
+      `Recorte do processo · ${brand.lockup}`,
       `Lead: ${input.name} <${input.email}>`,
       company ? `Empresa: ${company}` : "",
       input.message ? `\n${input.message}` : "",

@@ -7,7 +7,7 @@ import { notifyLead } from "@/lib/notify-lead";
 import { notifyWebhook } from "@/lib/notify-webhook";
 import { notifyNotion } from "@/lib/notify-notion";
 import { qualifyLead, type LeadQualification, type LeadTemperature } from "@/lib/qualify-lead";
-import { formatSlotLabel, isOfferedSlot, proposeSlots, type MeetingSlot } from "@/lib/slots";
+import { formatSlotLabel, isOfferedSlot, periodOf, proposeSlots, type MeetingSlot } from "@/lib/slots";
 import { meetingCalendarUrl } from "@/lib/calendar-link";
 
 const leadSchema = z.object({
@@ -176,6 +176,7 @@ export const bookLeadSlot = createServerFn({ method: "POST" })
       start: start.toISOString(),
       end: end.toISOString(),
       label: formatSlotLabel(start.toISOString()),
+      period: periodOf(start.toISOString()),
     };
 
     return {
