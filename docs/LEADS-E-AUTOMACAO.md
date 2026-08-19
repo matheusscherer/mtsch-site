@@ -12,207 +12,169 @@ Documento operacional para celular e desktop. Atualizado em **2026-08-19**.
 | GitHub | https://github.com/matheusscherer/mtsch-site |
 | Vercel (projeto) | https://vercel.com → **mtsch-site** |
 | Neon (banco) | https://console.neon.tech |
+| Resend (e-mail) | https://resend.com |
 | Notion (este projeto) | Página **Projeto 02 — MTSCH Landing** |
 | LinkedIn | https://linkedin.com/in/scherermatheus |
 | E-mail | contatomatheusscherer@gmail.com |
 
 ---
 
-## Status atual (o que já funciona)
+## Status atual
 
 - [x] Landing no ar (Vercel Production)
 - [x] LinkedIn e e-mail corretos no footer
 - [x] Cases com repositórios reais
-- [x] Rotas extras (`/bio`, `/cristali`) removidas
-- [x] CTAs apontam para o formulário `#contato`
+- [x] Rotas extras removidas
+- [x] CTAs apontam para `#contato`
 - [x] Formulário grava na tabela `leads` (Neon)
-- [x] SSL forçado na conexão Postgres (fix de produção)
-- [ ] Notificação por e-mail quando chega lead
-- [ ] Resposta automática ao lead + link de agenda
+- [x] SSL na conexão Postgres
+- [x] **Código** de notificação + auto-resposta (`src/lib/notify-lead.ts`)
+- [ ] `RESEND_API_KEY` na Vercel (você configura — passos abaixo)
+- [ ] Domínio verificado na Resend (para auto-resposta a qualquer lead)
+- [ ] `CALENDLY_URL` (opcional, entra no e-mail ao lead)
 - [ ] Classificação automática (quente / morno / frio)
 
 ---
 
-## Como ver os leads (celular ou PC)
+## Fase A — Ativar e-mail AGORA (passo a passo)
 
-1. Abra [console.neon.tech](https://console.neon.tech)
-2. Entre no projeto do banco ligado ao site
-3. **SQL Editor** → rode:
+O código já está no repo. Falta só a chave.
+
+### 1. Criar conta Resend
+
+1. Abra [https://resend.com](https://resend.com) → Sign up (pode ser com GitHub)
+2. **API Keys** → **Create API Key**
+3. Nome: `mtsch-site` · permissão: Sending access
+4. **Copie a chave** (`re_...`) — ela só aparece uma vez
+
+### 2. Colar na Vercel
+
+1. Vercel → **mtsch-site** → **Settings** → **Environment Variables**
+2. **Add**:
+
+| Key | Value |
+| --- | --- |
+| `RESEND_API_KEY` | a chave `re_...` |
+| `LEAD_NOTIFY_EMAIL` | `contatomatheusscherer@gmail.com` (opcional; já é o default) |
+| `RESEND_FROM` | deixe vazio no teste **ou** `MTSCH <onboarding@resend.dev>` |
+| `CALENDLY_URL` | (opcional) seu link Calendly, ex. `https://calendly.com/seu-user/30min` |
+
+3. Marque **Production** (e Preview se quiser)
+4. **Save** → **Redeploy**
+
+### 3. Testar
+
+1. Espere o deploy **Ready**
+2. Envie um lead de teste no site
+3. Confira a caixa de **contatomatheusscherer@gmail.com** (e spam)
+
+**Importante (teste sem domínio):**
+Com `onboarding@resend.dev`, a Resend só entrega e-mail para o **e-mail da sua conta Resend**.  
+Notificação **para você** funciona se a conta Resend for o mesmo Gmail.  
+Auto-resposta para o e-mail do *lead* (terceiros) só funciona depois de **verificar um domínio** em Resend → Domains.
+
+### 4. Domínio verificado (produção de verdade)
+
+1. Resend → **Domains** → Add `seudominio.com` (ou subdomínio `mail.`)
+2. Coloque os registros DNS que a Resend mostrar
+3. Quando Status = Verified, na Vercel:
+   - `RESEND_FROM` = `MTSCH <contato@seudominio.com>` (ou o endereço que você criou)
+4. Redeploy
+
+Aí a auto-resposta chega em qualquer lead.
+
+---
+
+## Como ver os leads
 
 ```sql
-SELECT id, name, email, company, message, created_at
+SELECT name, email, company, message, created_at
 FROM leads
 ORDER BY created_at DESC
 LIMIT 20;
 ```
 
-Cada envio do formulário vira uma linha. Campos:
-
-| Coluna | Significado |
-| --- | --- |
-| `id` | UUID do lead |
-| `name` | Nome |
-| `email` | E-mail |
-| `company` | Empresa (pode ser vazio) |
-| `message` | O que a pessoa quer automatizar |
-| `created_at` | Data/hora (UTC) |
+Neon → SQL Editor.
 
 ---
 
-## Variáveis na Vercel
-
-**Settings → Environment Variables** (Production + Preview):
+## Variáveis na Vercel (resumo)
 
 | Variável | Obrigatória | Notas |
 | --- | --- | --- |
-| `DATABASE_URL` | **sim** | Connection string da Neon. Preferir **pooled** + `sslmode=require`. |
-| `VITE_AUTH_ENABLED` | não | Já existe; login é opcional para a landing. |
+| `DATABASE_URL` | **sim** | Neon pooled + SSL |
+| `RESEND_API_KEY` | para e-mail | Sem ela o lead grava, mas não manda e-mail |
+| `LEAD_NOTIFY_EMAIL` | não | Default = contatomatheusscherer@gmail.com |
+| `RESEND_FROM` | não | Default = onboarding@resend.dev |
+| `CALENDLY_URL` | não | Se setado, entra no e-mail ao lead |
+| `VITE_AUTH_ENABLED` | não | Login opcional |
 
-Depois de mudar qualquer variável: **Redeploy**.
-
----
-
-## Arquitetura do formulário (código)
-
-```
-Visitante preenche o form
-        ↓
-contact.tsx (client) → submitLead({ data })
-        ↓
-src/lib/leads.ts  (server fn + Zod)
-        ↓
-getSql() → Neon (pg + SSL)
-        ↓
-INSERT INTO leads (...)
-```
-
-Arquivos-chave:
-
-- `src/components/site/contact.tsx` — UI do formulário
-- `src/lib/leads.ts` — validação Zod + insert
-- `src/lib/db.ts` — pool Neon com SSL
-- `migrations/0002_leads.sql` — schema da tabela
-- `scripts/migrate.mjs` — roda no `npm run build`
+Sempre **Redeploy** depois de mudar variável.
 
 ---
 
-## Próximo passo: e-mail + agenda (pipeline)
-
-Hoje o lead **só grava**. Objetivo: reagir na hora.
-
-### Nível 1 — Notificação (fazer primeiro)
-
-Quando nascer uma linha em `leads`:
-
-1. E-mail para **você** (`contatomatheusscherer@gmail.com`) com nome, e-mail, empresa e mensagem
-2. (Opcional) WhatsApp / Slack
-
-**Ferramentas:** Resend ou Brevo (API) **ou** n8n/Make lendo a tabela / webhook.
-
-### Nível 2 — Agenda para o lead
-
-1. E-mail automático para o **lead**
-2. Texto curto + link de agenda (Calendly ou Google Appointment Schedule)
-3. Ele marca horário sozinho
-
-Isso fecha a maioria dos casos sem IA.
-
-### Nível 3 — Análise + priorização (sênior)
+## Arquitetura (código)
 
 ```
-Form → Neon
-  ↓
-n8n / worker
-  ↓
-Classifica (regras ou LLM): quente | morno | frio
-  ↓
-Quente  → e-mail pra você + link de agenda pro lead
-Morno   → resposta padrão + nurture
-Frio    → só registra
+Form → submitLead (Zod)
+  → INSERT leads (Neon)
+  → notifyLead (Resend)
+       → e-mail para você
+       → auto-resposta ao lead (se domínio ok)
 ```
 
-**Regras simples (sem LLM no começo):**
+Arquivos:
 
-- mensagem ≥ 40 caracteres
-- preencheu empresa
-- palavras-chave: financeiro, WhatsApp, estoque, ERP, planilha, fechamento, lead, CRM
-- e-mail corporativo (não só gmail/hotmail) → peso extra
+- `src/lib/leads.ts` — insert + chama notify
+- `src/lib/notify-lead.ts` — Resend (fetch, sem lib extra)
+- `src/components/site/contact.tsx` — UI
+- `migrations/0002_leads.sql` — schema
 
-**Com LLM (depois):** resumir pedido, sugerir o que automatizar primeiro, rascunhar o 1º e-mail.
+E-mail é **best-effort**: se a Resend falhar, o lead **já está salvo** e o visitante vê sucesso.
 
-### Stack recomendada
+---
 
-| Camada | Ferramenta |
+## Fase B — Calendly
+
+1. Crie um evento 30 min em [calendly.com](https://calendly.com)
+2. Vercel → `CALENDLY_URL` = link do evento
+3. Redeploy
+
+O texto da auto-resposta já inclui o link quando a variável existe.
+
+---
+
+## Fase C — Classificação (depois)
+
+n8n: trigger (webhook ou poll Neon) → regras keywords → branch quente/morno/frio → Notion / Slack.
+
+Não bloqueia Fase A/B.
+
+---
+
+## Troubleshooting
+
+| Sintoma | Ação |
 | --- | --- |
-| Captação | Site + tabela `leads` (já pronto) |
-| Orquestração | n8n (preferência) ou Make |
-| E-mail | Resend / Brevo / Gmail API |
-| Agenda | Calendly (rápido) ou Google Calendar API |
-| Análise | Regras no n8n → LLM só se valer |
-
-**Não fazer agora:** agendador “inteligente” dentro do site; depender de LLM para o básico funcionar.
+| Lead grava, e-mail não chega | `RESEND_API_KEY` setada? Redeploy? Spam? |
+| Auto-resposta não chega no lead | Domínio ainda não verificado na Resend |
+| Form falha | `DATABASE_URL` + tabela `leads` |
+| Resend 403 | Chave inválida ou remetente não autorizado |
 
 ---
 
-## Checklist de implementação (quando for fazer)
-
-### Fase A — Notificação
-
-- [ ] Conta Resend (ou Brevo) + domínio/remetente verificado
-- [ ] `RESEND_API_KEY` (ou equivalente) na Vercel **ou** fluxo no n8n
-- [ ] Após `insert` em `leads`, disparar e-mail para você
-- [ ] Testar com lead real e conferir caixa de entrada
-
-### Fase B — Resposta + agenda
-
-- [ ] Criar link Calendly (30 min / consultoria)
-- [ ] E-mail automático ao lead com o link
-- [ ] Tom: curto, sem pitch longo
-
-### Fase C — Classificação
-
-- [ ] n8n: trigger em novo lead (webhook ou poll na Neon)
-- [ ] Nó de regras (keywords + tamanho + domínio)
-- [ ] Branch quente / morno / frio
-- [ ] (Opcional) card no Notion Comercial
-
----
-
-## Troubleshooting rápido
-
-| Sintoma | O que checar |
-| --- | --- |
-| “Não foi possível enviar” | `DATABASE_URL` na Vercel (Production)? Redeploy depois de salvar? |
-| Deploy **Build Failed** | Log de build; migration não pode derrubar o build (já tratado) |
-| Lead não aparece no Neon | SQL `SELECT * FROM leads`; tabela existe? connection string pooled? |
-| SSL / conexão | `db.ts` e `migrate.mjs` já forçam `ssl: { rejectUnauthorized: false }` |
-
-Criar tabela manualmente (se precisar):
-
-```sql
-CREATE TABLE IF NOT EXISTS leads (
-  id TEXT PRIMARY KEY,
-  name TEXT NOT NULL,
-  email TEXT NOT NULL,
-  company TEXT NOT NULL DEFAULT '',
-  message TEXT NOT NULL,
-  created_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
-);
-```
-
----
-
-## Definition of done (produto)
+## Definition of done
 
 - [x] Página converte e grava lead
-- [x] Cases reais + LinkedIn certo
-- [x] Docs no GitHub + Notion
-- [ ] Você recebe e-mail na hora do lead
-- [ ] Lead recebe link de agenda
-- [ ] Pipeline de qualificação (regras)
+- [x] Cases reais + LinkedIn
+- [x] Código de e-mail no repo
+- [ ] `RESEND_API_KEY` ativa e e-mail chega na sua caixa
+- [ ] Domínio Resend + auto-resposta estável
+- [ ] Calendly no e-mail ao lead
+- [ ] Qualificação n8n (opcional)
 
 ---
 
-## Como explicar em 20 segundos
+## Frase de 20s
 
-> Landing de conversão da MTSCH. Formulário valida com Zod, grava em Postgres (Neon) e está pronto para o próximo passo: notificação por e-mail, resposta com link de agenda e classificação automática via n8n — o mesmo tipo de automação que eu vendo para o cliente.
+> Landing da MTSCH grava lead no Postgres e dispara e-mail via Resend. Próximo nível é domínio verificado, Calendly na auto-resposta e qualificação no n8n — o mesmo tipo de automação que eu entrego para cliente.
