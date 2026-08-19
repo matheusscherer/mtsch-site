@@ -8,10 +8,10 @@ import { notifyWebhook } from "@/lib/notify-webhook";
 import { qualifyLead, type LeadQualification, type LeadTemperature } from "@/lib/qualify-lead";
 
 const leadSchema = z.object({
-  name: z.string().trim().min(2).max(80),
-  email: z.string().trim().email().max(120),
+  name: z.string().trim().min(2, "Nome curto demais.").max(80),
+  email: z.string().trim().email("E-mail inválido.").max(120),
   company: z.string().trim().max(120).optional(),
-  message: z.string().trim().min(8).max(2000),
+  message: z.string().trim().min(2, "Conta o que automatizar.").max(2000),
 });
 
 export type LeadInput = z.infer<typeof leadSchema>;
@@ -51,20 +51,34 @@ export const submitLead = createServerFn({ method: "POST" })
     });
     const id = crypto.randomUUID();
     const sql = await getSql();
-    await sql`
-      insert into leads (id, name, email, company, message, score, temperature, reason, next_action)
-      values (
-        ${id},
-        ${data.name},
-        ${data.email},
-        ${company},
-        ${data.message},
-        ${qualification.score},
-        ${qualification.temperature},
-        ${qualification.reason},
-        ${qualification.nextAction}
-      )
-    `;
+    try {
+      await sql`
+        insert into leads (id, name, email, company, message, score, temperature, reason, next_action)
+        values (
+          ${id},
+          ${data.name},
+          ${data.email},
+          ${company},
+          ${data.message},
+          ${qualification.score},
+          ${qualification.temperature},
+          ${qualification.reason},
+          ${qualification.nextAction}
+        )
+      `;
+    } catch (err) {
+      console.error("[submitLead] insert com classificação falhou, tentando schema básico:", err);
+      await sql`
+        insert into leads (id, name, email, company, message)
+        values (
+          ${id},
+          ${data.name},
+          ${data.email},
+          ${company},
+          ${data.message}
+        )
+      `;
+    }
 
     try {
       await notifyLead({

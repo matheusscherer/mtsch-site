@@ -19,20 +19,41 @@ export function Contact() {
     const form = e.currentTarget;
     const fd = new FormData(form);
     const payload = {
-      name: String(fd.get("name") ?? ""),
-      email: String(fd.get("email") ?? ""),
-      company: String(fd.get("company") ?? ""),
-      message: String(fd.get("message") ?? ""),
+      name: String(fd.get("name") ?? "").trim(),
+      email: String(fd.get("email") ?? "").trim(),
+      company: String(fd.get("company") ?? "").trim(),
+      message: String(fd.get("message") ?? "").trim(),
     };
+
+    if (payload.name.length < 2) {
+      toast.error("Coloca teu nome.");
+      return;
+    }
+    if (!payload.email.includes("@")) {
+      toast.error("E-mail inválido.");
+      return;
+    }
+    if (payload.message.length < 2) {
+      toast.error("Conta o que automatizar — uma frase já serve.");
+      return;
+    }
 
     setPending(true);
     try {
       const res = await submitLead({ data: payload });
       form.reset();
       setResult({ temperature: res.temperature, nextAction: res.nextAction });
-      toast.success("Recebido. Já classificamos o pedido.");
-    } catch {
-      toast.error("Não foi possível enviar. Tente de novo em instantes.");
+      toast.success(`Lead ${res.temperature}. ${res.nextAction}.`);
+    } catch (err) {
+      const raw = err instanceof Error ? err.message : "";
+      const friendly = raw.includes("automatizar")
+        ? "Conta o que automatizar — uma frase já serve."
+        : raw.includes("E-mail")
+          ? "E-mail inválido."
+          : raw.includes("Nome")
+            ? "Coloca teu nome."
+            : "Não foi possível enviar. Tente de novo em instantes.";
+      toast.error(friendly);
     } finally {
       setPending(false);
     }
@@ -108,7 +129,7 @@ export function Contact() {
                   id="message"
                   name="message"
                   required
-                  minLength={8}
+                  minLength={2}
                   placeholder="Ex.: fechamento financeiro, leads do WhatsApp, estoque…"
                 />
               </Field>
