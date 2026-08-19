@@ -5,6 +5,7 @@ import { authMiddleware } from "@/lib/auth/middleware";
 import { brand } from "@/lib/site";
 import { notifyLead } from "@/lib/notify-lead";
 import { notifyWebhook } from "@/lib/notify-webhook";
+import { notifyNotion } from "@/lib/notify-notion";
 import { qualifyLead, type LeadQualification, type LeadTemperature } from "@/lib/qualify-lead";
 import { formatSlotLabel, isOfferedSlot, proposeSlots, type MeetingSlot } from "@/lib/slots";
 import { meetingCalendarUrl } from "@/lib/calendar-link";
@@ -113,6 +114,18 @@ export const submitLead = createServerFn({ method: "POST" })
       });
     } catch (err) {
       console.error("[submitLead] notifyWebhook falhou:", err);
+    }
+
+    try {
+      await notifyNotion({
+        name: data.name,
+        email: data.email,
+        company,
+        message: data.message,
+        qualification,
+      });
+    } catch (err) {
+      console.error("[submitLead] notifyNotion falhou:", err);
     }
 
     return {

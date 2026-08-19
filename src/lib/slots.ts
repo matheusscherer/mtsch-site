@@ -22,14 +22,19 @@ function addDays(ymd: string, days: number): string {
 }
 
 function formatSlot(start: Date): string {
-  return new Intl.DateTimeFormat("pt-BR", {
-    timeZone: "America/Sao_Paulo",
-    weekday: "short",
-    day: "numeric",
-    month: "short",
-    hour: "2-digit",
-    minute: "2-digit",
-  }).format(start);
+  const ymd = new Intl.DateTimeFormat("en-CA", { timeZone: "America/Sao_Paulo" }).format(start);
+  const [, month, day] = ymd.split("-").map(Number);
+  const hour = Number(
+    new Intl.DateTimeFormat("en-GB", {
+      timeZone: "America/Sao_Paulo",
+      hour: "numeric",
+      hour12: false,
+    }).format(start),
+  );
+  const dow = new Date(`${ymd}T12:00:00-03:00`).getDay();
+  const weekdays = ["dom", "seg", "ter", "qua", "qui", "sex", "sáb"];
+  const months = ["jan", "fev", "mar", "abr", "mai", "jun", "jul", "ago", "set", "out", "nov", "dez"];
+  return `${weekdays[dow]} ${day} ${months[month - 1]} · ${hour}h`;
 }
 
 export function proposeSlots(now = new Date(), count = 3): MeetingSlot[] {

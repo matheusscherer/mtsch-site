@@ -121,15 +121,10 @@ export function Contact() {
             <h3 className="font-display mt-3 text-xl font-semibold text-fg">
               Classificado como {result.temperature}
             </h3>
-            <p className="mt-3 text-sm leading-relaxed text-muted">{result.nextAction}.</p>
             <p className="mt-3 text-sm leading-relaxed text-muted">
-              O lead foi para a{" "}
-              <a href="/inbox" className="underline decoration-line underline-offset-4 hover:text-fg">
-                inbox
-              </a>
-              {result.emailSent
-                ? " e um e-mail saiu para a operação."
-                : ". E-mail ainda não dispara — falta a chave Resend na Vercel."}
+              {result.booked
+                ? "Horário reservado. Abre no Google Agenda para confirmar o convite."
+                : "Escolhe um horário. 30 min, sem pitch."}
             </p>
 
             {result.booked ? (

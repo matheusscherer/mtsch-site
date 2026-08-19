@@ -32,7 +32,10 @@ Documento operacional para celular e desktop. Atualizado em **2026-08-19**.
 - [x] Inbox autenticada em `/inbox`
 - [x] Webhook opcional para n8n (`N8N_WEBHOOK_URL`)
 - [x] Três horários no formulário + botão Google Agenda
+- [x] CRM Notion **Leads MTSCH** (board por temperatura)
+- [x] Briefing Grok 9h em dia útil
 - [ ] `RESEND_API_KEY` na Vercel (você configura — passos abaixo)
+- [ ] `NOTION_TOKEN` na Vercel (para o site gravar no Notion sozinho)
 - [ ] Domínio verificado na Resend (para auto-resposta a qualquer lead)
 - [ ] `CALENDLY_URL` (opcional, entra no e-mail ao lead)
 
