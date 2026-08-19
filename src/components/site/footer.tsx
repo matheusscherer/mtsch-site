@@ -26,6 +26,16 @@ export function Footer() {
                 {s.kind === "github" ? <Github className="size-4" /> : <Linkedin className="size-4" />}
               </a>
             ))}
+          {hasWhatsapp() ? (
+            <a
+              href={whatsappUrl(whatsappIntro()) ?? "#"}
+              target="_blank"
+              rel="noreferrer"
+              className="text-xs tracking-wide text-muted transition-colors hover:text-fg"
+            >
+              WhatsApp
+            </a>
+          ) : null}
           <a
             href={`mailto:${brand.email}`}
             className="text-xs tracking-wide text-muted transition-colors hover:text-fg"
