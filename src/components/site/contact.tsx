@@ -123,7 +123,7 @@ export function Contact() {
             </h3>
             <p className="mt-3 text-sm leading-relaxed text-muted">
               {result.booked
-                ? "Combinado. Confirma no teu Calendar — senão o horário não trava."
+                ? "Combinado. Meet e convite entram no Google Agenda — teu e o dele."
                 : result.temperature === "quente"
                   ? "Cabe ainda hoje. Qual janela funciona?"
                   : result.temperature === "morno"
@@ -134,11 +134,9 @@ export function Contact() {
             {result.booked ? (
               <div className="mt-8">
                 <p className="text-sm text-fg">{result.booked.label} — recorte do processo</p>
-                <Button asChild className="mt-4">
-                  <a href={result.booked.calendarUrl} target="_blank" rel="noreferrer">
-                    Abrir no Google Agenda
-                  </a>
-                </Button>
+                <p className="mt-2 text-sm leading-relaxed text-muted">
+                  Não precisa abrir o Calendar. O convite sai sozinho.
+                </p>
               </div>
             ) : (
               <div className="mt-8">

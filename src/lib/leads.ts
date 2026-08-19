@@ -6,6 +6,7 @@ import { brand } from "@/lib/site";
 import { notifyLead } from "@/lib/notify-lead";
 import { notifyWebhook } from "@/lib/notify-webhook";
 import { notifyNotion } from "@/lib/notify-notion";
+import { notifyOps } from "@/lib/notify-ops";
 import { qualifyLead, type LeadQualification, type LeadTemperature } from "@/lib/qualify-lead";
 import { formatSlotLabel, isOfferedSlot, periodOf, proposeSlots, type MeetingSlot } from "@/lib/slots";
 import { meetingCalendarUrl } from "@/lib/calendar-link";
@@ -117,6 +118,24 @@ export const submitLead = createServerFn({ method: "POST" })
     }
 
     try {
+      await notifyOps({
+        type: "lead.created",
+        lead: {
+          id,
+          name: data.name,
+          email: data.email,
+          company,
+          message: data.message,
+          score: qualification.score,
+          temperature: qualification.temperature,
+          reason: qualification.reason,
+        },
+      });
+    } catch (err) {
+      console.error("[submitLead] notifyOps falhou:", err);
+    }
+
+    try {
       await notifyNotion({
         name: data.name,
         email: data.email,
@@ -158,8 +177,11 @@ export const bookLeadSlot = createServerFn({ method: "POST" })
       email: string;
       company: string;
       message: string;
+      score: number;
+      temperature: string;
+      reason: string;
     }>`
-      select id, name, email, company, message from leads where id = ${data.leadId} limit 1
+      select id, name, email, company, message, score, temperature, reason from leads where id = ${data.leadId} limit 1
     `;
     const lead = rows[0];
     if (!lead) throw new Error("Lead não encontrado.");
@@ -170,6 +192,25 @@ export const bookLeadSlot = createServerFn({ method: "POST" })
       `;
     } catch (err) {
       console.error("[bookLeadSlot] update meeting_at falhou:", err);
+    }
+
+    try {
+      await notifyOps({
+        type: "lead.booked",
+        lead: {
+          id: lead.id,
+          name: lead.name,
+          email: lead.email,
+          company: lead.company,
+          message: lead.message,
+          score: Number(lead.score),
+          temperature: lead.temperature,
+          reason: lead.reason,
+          meetingAt: start.toISOString(),
+        },
+      });
+    } catch (err) {
+      console.error("[bookLeadSlot] notifyOps falhou:", err);
     }
 
     const slot: MeetingSlot = {
