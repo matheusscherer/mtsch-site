@@ -1,6 +1,8 @@
 import { useEffect, useState } from "react";
+import { Link } from "@tanstack/react-router";
 import { Menu, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { SignedIn } from "@/lib/auth/gates";
 import { brand, navItems } from "@/lib/site";
 import { scrollToId } from "@/lib/utils";
 
@@ -53,6 +55,14 @@ export function Header() {
               {item.label}
             </a>
           ))}
+          <SignedIn>
+            <Link
+              to="/inbox"
+              className="text-sm text-fg-soft transition-colors duration-200 hover:text-fg"
+            >
+              Inbox
+            </Link>
+          </SignedIn>
           <Button size="sm" onClick={() => go("contato")}>
             Agendar Reunião
           </Button>
@@ -85,6 +95,15 @@ export function Header() {
                 {item.label}
               </a>
             ))}
+            <SignedIn>
+              <Link
+                to="/inbox"
+                className="flex min-h-12 items-center text-base text-fg-soft"
+                onClick={() => setOpen(false)}
+              >
+                Inbox
+              </Link>
+            </SignedIn>
             <Button className="mt-3 w-full" onClick={() => go("contato")}>
               Agendar Reunião
             </Button>

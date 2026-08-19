@@ -128,10 +128,15 @@ function authPopupPlugin(): Plugin {
 // opens a second dev-server port, which breaks the single-port preview.
 // The dev server starts once `src/router.tsx` and `src/routes/` exist — see
 // AGENTS.md § "First scaffold".
-export default defineConfig(({ command }) => ({
+export default defineConfig(({ command, isPreview }) => ({
   server: {
     host: "0.0.0.0",
     port: 8080,
+    strictPort: true,
+  },
+  preview: {
+    host: "127.0.0.1",
+    port: 8081,
     strictPort: true,
   },
   resolve: { tsconfigPaths: true },
@@ -143,7 +148,7 @@ export default defineConfig(({ command }) => ({
     grokPwaPlugin(),
     tailwindcss(),
     tanstackStart(),
-    ...(command === "build"
+    ...(command === "build" || isPreview
       ? [
           nitro({
             preset: "vercel",

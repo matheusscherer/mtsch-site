@@ -4,11 +4,15 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
-import { submitLead } from "@/lib/leads";
+import { submitLead, type LeadTemperature } from "@/lib/leads";
 import { brand } from "@/lib/site";
 
 export function Contact() {
   const [pending, setPending] = useState(false);
+  const [result, setResult] = useState<{
+    temperature: LeadTemperature;
+    nextAction: string;
+  } | null>(null);
 
   async function onSubmit(e: FormEvent<HTMLFormElement>) {
     e.preventDefault();
@@ -23,9 +27,10 @@ export function Contact() {
 
     setPending(true);
     try {
-      await submitLead({ data: payload });
+      const res = await submitLead({ data: payload });
       form.reset();
-      toast.success("Recebido. Retorno em até um dia útil.");
+      setResult({ temperature: res.temperature, nextAction: res.nextAction });
+      toast.success("Recebido. Já classificamos o pedido.");
     } catch {
       toast.error("Não foi possível enviar. Tente de novo em instantes.");
     } finally {
@@ -59,47 +64,60 @@ export function Contact() {
           </ul>
         </div>
 
-        <form onSubmit={onSubmit} className="rounded-xl border border-line bg-bg-elevated p-6 sm:p-8">
-          <div className="grid gap-5 sm:grid-cols-2">
-            <Field label="Nome" htmlFor="name">
-              <Input id="name" name="name" required autoComplete="name" placeholder="Seu nome" />
-            </Field>
-            <Field label="E-mail" htmlFor="email">
-              <Input
-                id="email"
-                name="email"
-                type="email"
-                required
-                autoComplete="email"
-                placeholder="voce@empresa.com"
-              />
-            </Field>
+        {result ? (
+          <div className="rounded-xl border border-line bg-bg-elevated p-6 sm:p-8">
+            <p className="text-micro text-muted uppercase">Pedido recebido</p>
+            <h3 className="font-display mt-3 text-xl font-semibold text-fg">
+              Classificado como {result.temperature}
+            </h3>
+            <p className="mt-3 text-sm leading-relaxed text-muted">{result.nextAction}.</p>
+            <Button type="button" className="mt-8" onClick={() => setResult(null)}>
+              Enviar outro
+            </Button>
           </div>
-          <div className="mt-5">
-            <Field label="Empresa" htmlFor="company">
-              <Input
-                id="company"
-                name="company"
-                autoComplete="organization"
-                placeholder="Opcional"
-              />
-            </Field>
-          </div>
-          <div className="mt-5">
-            <Field label="O que automatizar" htmlFor="message">
-              <Textarea
-                id="message"
-                name="message"
-                required
-                minLength={8}
-                placeholder="Ex.: fechamento financeiro, leads do WhatsApp, estoque…"
-              />
-            </Field>
-          </div>
-          <Button type="submit" className="mt-7 w-full sm:w-auto" disabled={pending}>
-            {pending ? "Enviando…" : "Agendar reunião"}
-          </Button>
-        </form>
+        ) : (
+          <form onSubmit={onSubmit} className="rounded-xl border border-line bg-bg-elevated p-6 sm:p-8">
+            <div className="grid gap-5 sm:grid-cols-2">
+              <Field label="Nome" htmlFor="name">
+                <Input id="name" name="name" required autoComplete="name" placeholder="Seu nome" />
+              </Field>
+              <Field label="E-mail" htmlFor="email">
+                <Input
+                  id="email"
+                  name="email"
+                  type="email"
+                  required
+                  autoComplete="email"
+                  placeholder="voce@empresa.com"
+                />
+              </Field>
+            </div>
+            <div className="mt-5">
+              <Field label="Empresa" htmlFor="company">
+                <Input
+                  id="company"
+                  name="company"
+                  autoComplete="organization"
+                  placeholder="Opcional"
+                />
+              </Field>
+            </div>
+            <div className="mt-5">
+              <Field label="O que automatizar" htmlFor="message">
+                <Textarea
+                  id="message"
+                  name="message"
+                  required
+                  minLength={8}
+                  placeholder="Ex.: fechamento financeiro, leads do WhatsApp, estoque…"
+                />
+              </Field>
+            </div>
+            <Button type="submit" className="mt-7 w-full sm:w-auto" disabled={pending}>
+              {pending ? "Enviando…" : "Agendar reunião"}
+            </Button>
+          </form>
+        )}
       </div>
     </section>
   );

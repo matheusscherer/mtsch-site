@@ -23,8 +23,10 @@ function Login() {
             {brand.line}
           </span>
         </Link>
-        <h1 className="font-display text-2xl font-semibold text-fg">Área do cliente</h1>
-        <p className="mt-2 text-sm text-muted">Entre para acompanhar entregas e relatórios.</p>
+        <h1 className="font-display text-2xl font-semibold text-fg">Inbox de leads</h1>
+        <p className="mt-2 text-sm text-muted">
+          Entre para ver os pedidos classificados — quente, morno ou frio.
+        </p>
         <div className="mt-8 space-y-3">
           {authEnabled ? (
             GROK_PROVIDERS.map((p) => (
@@ -32,7 +34,7 @@ function Login() {
                 key={p.providerId}
                 type="button"
                 className="w-full"
-                onClick={() => signIn(p.providerId, { callbackURL: "/" })}
+                onClick={() => signIn(p.providerId, { callbackURL: "/inbox" })}
               >
                 Continuar com {p.label}
               </Button>

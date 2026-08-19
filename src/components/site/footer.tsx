@@ -32,10 +32,10 @@ export function Footer() {
             {brand.email}
           </a>
           <Link
-            to="/login"
+            to="/inbox"
             className="text-xs tracking-[0.14em] text-muted uppercase transition-colors hover:text-fg"
           >
-            Área do cliente
+            Inbox
           </Link>
         </div>
       </div>

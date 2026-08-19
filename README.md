@@ -6,7 +6,7 @@ Landing page de conversão da marca **MTSCH**. Dark mode premium, hero com hiera
 **Problema:** processos manuais e presença digital genérica não convertem reunião.  
 **Solução:** uma página única, rápida e sóbria, com CTA claro e formulário persistido na Neon.  
 **Stack:** React 19 · TypeScript · TanStack Start · Tailwind v4 · Postgres (Neon / PGLite).  
-**Resultado:** site no ar, leads gravando, repositório e documentação prontos para o próximo passo (e-mail + agenda).
+**Resultado:** site no ar, leads gravando e classificados (quente/morno/frio), inbox em `/inbox`. Próximo passo operacional: colar `RESEND_API_KEY` (e opcionalmente Calendly) na Vercel.
 
 ## Stack
 
@@ -34,9 +34,10 @@ npm run build      # produção + migrations
 src/
   components/site/   # hero, nav, cases, contato
   components/ui/     # button, input, label, textarea
-  lib/leads.ts       # server function — insert em leads
-  lib/site.ts        # copy e links da marca
-  routes/            # /, /login, /api/auth/*
+  lib/leads.ts       # server function — insert + classificação
+  lib/qualify-lead.ts # regras quente / morno / frio
+  lib/notify-lead.ts  # Resend
+  routes/            # /, /login, /inbox, /api/auth/*
 migrations/
   0001_auth.sql
   0002_leads.sql
