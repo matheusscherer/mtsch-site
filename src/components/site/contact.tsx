@@ -4,78 +4,89 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
-import { submitLead, type LeadTemperature } from "@/lib/leads";
+import { submitLead } from "@/lib/leads";
 import { isPlausibleEmail } from "@/lib/email";
+import { parseBrMobile } from "@/lib/phone";
 import { brand } from "@/lib/site";
 import { hasWhatsapp, whatsappFromLead, whatsappIntro, whatsappUrl } from "@/lib/whatsapp";
 
-type Result = {
-  leadId: string;
-  temperature: LeadTemperature;
-  nextAction: string;
-  wa?: string;
+type Payload = {
+  name: string;
+  email: string;
+  company: string;
+  message: string;
+  phone: string;
 };
+
+type Result = { wa?: string };
+
+function readPayload(form: HTMLFormElement): Payload {
+  const fd = new FormData(form);
+  return {
+    name: String(fd.get("name") ?? "").trim(),
+    email: String(fd.get("email") ?? "").trim(),
+    company: String(fd.get("company") ?? "").trim(),
+    message: String(fd.get("message") ?? "").trim(),
+    phone: String(fd.get("phone") ?? "").trim(),
+  };
+}
+
+function validate(payload: Payload): string | null {
+  if (payload.name.length < 2) return "Coloca teu nome.";
+  if (!isPlausibleEmail(payload.email)) return "E-mail inválido — usa um endereço real.";
+  if (payload.phone && !parseBrMobile(payload.phone)) return "WhatsApp inválido — DDD + 9 dígitos.";
+  if (payload.message.length < 2) return "Conta o que automatizar — uma frase já serve.";
+  return null;
+}
 
 export function Contact() {
   const [pending, setPending] = useState(false);
   const [result, setResult] = useState<Result | null>(null);
   const directWa = whatsappUrl(whatsappIntro());
 
-  async function onSubmit(e: FormEvent<HTMLFormElement>) {
-    e.preventDefault();
-    const form = e.currentTarget;
-    const fd = new FormData(form);
-    const payload = {
-      name: String(fd.get("name") ?? "").trim(),
-      email: String(fd.get("email") ?? "").trim(),
-      company: String(fd.get("company") ?? "").trim(),
-      message: String(fd.get("message") ?? "").trim(),
-    };
-
-    if (payload.name.length < 2) {
-      toast.error("Coloca teu nome.");
-      return;
-    }
-    if (!isPlausibleEmail(payload.email)) {
-      toast.error("E-mail inválido — usa um endereço real.");
-      return;
-    }
-    if (payload.message.length < 2) {
-      toast.error("Conta o que automatizar — uma frase já serve.");
+  async function capture(form: HTMLFormElement, openWa: boolean) {
+    const payload = readPayload(form);
+    const error = validate(payload);
+    if (error) {
+      toast.error(error);
       return;
     }
 
     setPending(true);
     try {
-      const res = await submitLead({ data: payload });
+      await submitLead({ data: payload });
+      const wa =
+        whatsappUrl(
+          whatsappFromLead({
+            name: payload.name,
+            company: payload.company,
+            message: payload.message,
+          }),
+        ) ?? undefined;
+      if (openWa && wa) window.open(wa, "_blank", "noopener,noreferrer");
       form.reset();
-      setResult({
-        leadId: res.leadId,
-        temperature: res.temperature,
-        nextAction: res.nextAction,
-        wa:
-          whatsappUrl(
-            whatsappFromLead({
-              name: payload.name,
-              company: payload.company,
-              message: payload.message,
-            }),
-          ) ?? undefined,
-      });
+      setResult({ wa });
       toast.success("Recebi. A gente analisa e responde.");
     } catch (err) {
       const raw = err instanceof Error ? err.message : "";
-      const friendly = raw.includes("automatizar")
-        ? "Conta o que automatizar — uma frase já serve."
-        : raw.includes("E-mail")
-          ? "E-mail inválido — usa um endereço real."
-          : raw.includes("Nome")
-            ? "Coloca teu nome."
-            : "Não foi possível enviar. Tente de novo em instantes.";
+      const friendly = raw.includes("WhatsApp")
+        ? "WhatsApp inválido — DDD + 9 dígitos."
+        : raw.includes("automatizar")
+          ? "Conta o que automatizar — uma frase já serve."
+          : raw.includes("E-mail")
+            ? "E-mail inválido — usa um endereço real."
+            : raw.includes("Nome")
+              ? "Coloca teu nome."
+              : "Não foi possível enviar. Tente de novo em instantes.";
       toast.error(friendly);
     } finally {
       setPending(false);
     }
+  }
+
+  function onSubmit(e: FormEvent<HTMLFormElement>) {
+    e.preventDefault();
+    void capture(e.currentTarget, false);
   }
 
   return (
@@ -119,10 +130,10 @@ export function Contact() {
         {result ? (
           <div className="rounded-xl border border-line bg-bg-elevated p-6 sm:p-8">
             <p className="text-micro text-muted uppercase">Pedido recebido</p>
-            <h3 className="font-display mt-3 text-xl font-semibold text-fg">
-              Classificado como {result.temperature}
-            </h3>
-            <p className="mt-3 text-sm leading-relaxed text-muted">{result.nextAction}.</p>
+            <h3 className="font-display mt-3 text-xl font-semibold text-fg">Recebi.</h3>
+            <p className="mt-3 text-sm leading-relaxed text-muted">
+              A gente analisa e te responde. Se quiser, já chama no WhatsApp.
+            </p>
             {result.wa ? (
               <Button asChild className="mt-8 w-full sm:w-auto">
                 <a href={result.wa} target="_blank" rel="noreferrer">
@@ -152,13 +163,23 @@ export function Contact() {
                 />
               </Field>
             </div>
-            <div className="mt-5">
+            <div className="mt-5 grid gap-5 sm:grid-cols-2">
               <Field label="Empresa" htmlFor="company">
                 <Input
                   id="company"
                   name="company"
                   autoComplete="organization"
                   placeholder="Opcional"
+                />
+              </Field>
+              <Field label="WhatsApp" htmlFor="phone">
+                <Input
+                  id="phone"
+                  name="phone"
+                  type="tel"
+                  inputMode="tel"
+                  autoComplete="tel"
+                  placeholder="51 99999-9999"
                 />
               </Field>
             </div>
@@ -180,13 +201,18 @@ export function Contact() {
               <Button type="submit" className="w-full sm:w-auto" disabled={pending}>
                 {pending ? "Enviando…" : "Enviar pedido"}
               </Button>
-              {directWa ? (
-                <Button asChild variant="quiet" className="w-full sm:w-auto">
-                  <a href={directWa} target="_blank" rel="noreferrer">
-                    WhatsApp
-                  </a>
-                </Button>
-              ) : null}
+              <Button
+                type="button"
+                variant="quiet"
+                className="w-full sm:w-auto"
+                disabled={pending}
+                onClick={(e) => {
+                  const form = e.currentTarget.form;
+                  if (form) void capture(form, true);
+                }}
+              >
+                WhatsApp
+              </Button>
             </div>
           </form>
         )}

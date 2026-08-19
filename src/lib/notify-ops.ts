@@ -6,6 +6,7 @@ type OpsEvent = {
     email: string;
     company: string;
     message: string;
+    phone?: string;
     score?: number;
     temperature?: string;
     reason?: string;

@@ -10,6 +10,7 @@ import { listLeads, type LeadRow, type LeadTemperature } from "@/lib/leads";
 import { meetingCalendarUrl } from "@/lib/calendar-link";
 import { proposeSlots } from "@/lib/slots";
 import { brand } from "@/lib/site";
+import { formatBrMobile, leadWhatsappUrl } from "@/lib/phone";
 import { cn } from "@/lib/utils";
 
 export const Route = createFileRoute("/inbox")({ component: InboxPage });
@@ -151,7 +152,13 @@ function LeadCard({ lead }: { lead: LeadRow }) {
         start,
       })
     : null;
-  const mailto = `mailto:${lead.email}?subject=${encodeURIComponent(`MTSCH · ${lead.name}`)}&body=${encodeURIComponent(`Olá, ${lead.name.split(" ")[0] || lead.name}.\n\nRecebi teu pedido. Vamos falar 30 min sobre: ${lead.message}\n`)}`;
+  const mailto = `mailto:${lead.email}?subject=${encodeURIComponent(`MTSCH · ${lead.name}`)}&body=${encodeURIComponent(`Olá, ${lead.name.split(" ")[0] || lead.name}.\n\nRecebi teu pedido. Vamos falar sobre: ${lead.message}\n`)}`;
+  const wa = lead.phone
+    ? leadWhatsappUrl(
+        lead.phone,
+        `Oi ${lead.name.split(" ")[0] || lead.name}, recebi teu pedido na MTSCH. Vamos olhar: ${lead.message}`,
+      )
+    : null;
 
   return (
     <li className="rounded-xl border border-line bg-bg-elevated p-5 sm:p-6">
@@ -164,6 +171,12 @@ function LeadCard({ lead }: { lead: LeadRow }) {
             <a className="hover:text-fg" href={`mailto:${lead.email}`}>
               {lead.email}
             </a>
+            {lead.phone ? (
+              <>
+                <span className="mx-2 text-line-strong">·</span>
+                <span>{formatBrMobile(lead.phone)}</span>
+              </>
+            ) : null}
           </p>
         </div>
         <TempBadge value={lead.temperature} score={lead.score} />
@@ -189,6 +202,16 @@ function LeadCard({ lead }: { lead: LeadRow }) {
         >
           Responder
         </a>
+        {wa ? (
+          <a
+            href={wa}
+            target="_blank"
+            rel="noreferrer"
+            className="inline-flex min-h-11 items-center rounded-full border border-line px-4 text-sm text-fg-soft transition-colors hover:border-fg hover:text-fg"
+          >
+            WhatsApp
+          </a>
+        ) : null}
         {calendarUrl ? (
           <a
             href={calendarUrl}

@@ -66,6 +66,7 @@ export function qualifyLead(input: {
   email: string;
   company: string;
   message: string;
+  phone?: string;
 }): LeadQualification {
   const reasons: string[] = [];
   let score = 0;
@@ -91,6 +92,11 @@ export function qualifyLead(input: {
   if (uniqueHits.length > 0) {
     score += uniqueHits.length * 2;
     reasons.push(`sinais: ${uniqueHits.join(", ")}`);
+  }
+
+  if (input.phone && input.phone.length === 11) {
+    score += 1;
+    reasons.push("deixou WhatsApp");
   }
 
   const domain = domainOf(input.email);

@@ -7,6 +7,7 @@ export async function notifyNotion(input: {
   email: string;
   company: string;
   message: string;
+  phone?: string;
   qualification: LeadQualification;
 }): Promise<void> {
   const token = process.env.NOTION_TOKEN?.trim();
@@ -34,7 +35,20 @@ export async function notifyNotion(input: {
         Score: { number: q.score },
         Status: { select: { name: "novo" } },
         Motivo: { rich_text: [{ text: { content: clip(q.reason, 200) } }] },
-        Mensagem: { rich_text: [{ text: { content: clip(input.message, 1900) } }] },
+        Mensagem: {
+          rich_text: [
+            {
+              text: {
+                content: clip(
+                  input.phone
+                    ? `${input.message}\n\nWhatsApp: ${input.phone}`
+                    : input.message,
+                  1900,
+                ),
+              },
+            },
+          ],
+        },
       },
     }),
   });

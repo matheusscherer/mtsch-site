@@ -11,6 +11,7 @@ import { qualifyLead, type LeadQualification, type LeadTemperature } from "@/lib
 import { formatSlotLabel, isOfferedSlot, periodOf, type MeetingSlot } from "@/lib/slots";
 import { meetingCalendarUrl } from "@/lib/calendar-link";
 import { isPlausibleEmail } from "@/lib/email";
+import { parseBrMobile } from "@/lib/phone";
 
 const leadSchema = z.object({
   name: z.string().trim().min(2, "Nome curto demais.").max(80),
@@ -21,6 +22,13 @@ const leadSchema = z.object({
     .refine(isPlausibleEmail, "E-mail inválido."),
   company: z.string().trim().max(120).optional(),
   message: z.string().trim().min(2, "Conta o que automatizar.").max(2000),
+  phone: z
+    .string()
+    .trim()
+    .max(20)
+    .optional()
+    .transform((s) => s ?? "")
+    .refine((s) => s.length === 0 || parseBrMobile(s) !== null, "WhatsApp inválido."),
 });
 
 export type LeadInput = z.infer<typeof leadSchema>;
@@ -31,6 +39,7 @@ export type LeadRow = {
   email: string;
   company: string;
   message: string;
+  phone: string;
   score: number;
   temperature: LeadTemperature;
   reason: string;
@@ -54,22 +63,25 @@ export const submitLead = createServerFn({ method: "POST" })
   .validator((input: unknown) => leadSchema.parse(input))
   .handler(async ({ data }) => {
     const company = data.company ?? "";
+    const phone = parseBrMobile(data.phone ?? "") ?? "";
     const qualification = qualifyLead({
       email: data.email,
       company,
       message: data.message,
+      phone,
     });
     const id = crypto.randomUUID();
     const sql = await getSql();
     try {
       await sql`
-        insert into leads (id, name, email, company, message, score, temperature, reason, next_action)
+        insert into leads (id, name, email, company, message, phone, score, temperature, reason, next_action)
         values (
           ${id},
           ${data.name},
           ${data.email},
           ${company},
           ${data.message},
+          ${phone},
           ${qualification.score},
           ${qualification.temperature},
           ${qualification.reason},
@@ -112,6 +124,7 @@ export const submitLead = createServerFn({ method: "POST" })
           email: data.email,
           company,
           message: data.message,
+          phone,
           score: qualification.score,
           temperature: qualification.temperature,
           reason: qualification.reason,
@@ -131,6 +144,7 @@ export const submitLead = createServerFn({ method: "POST" })
           email: data.email,
           company,
           message: data.message,
+          phone,
           score: qualification.score,
           temperature: qualification.temperature,
           reason: qualification.reason,
@@ -146,6 +160,7 @@ export const submitLead = createServerFn({ method: "POST" })
         email: data.email,
         company,
         message: data.message,
+        phone,
         qualification,
       });
     } catch (err) {
@@ -249,24 +264,35 @@ export const listLeads = createServerFn({ method: "GET" })
       throw new Error("Forbidden");
     }
 
-    const rows = await sql<{
+    let rows: {
       id: string;
       name: string;
       email: string;
       company: string;
       message: string;
+      phone?: string;
       score: number;
       temperature: string;
       reason: string;
       next_action: string;
       meeting_at: string | null;
       created_at: string;
-    }>`
-      select id, name, email, company, message, score, temperature, reason, next_action, meeting_at, created_at
-      from leads
-      order by created_at desc
-      limit 80
-    `;
+    }[];
+    try {
+      rows = await sql`
+        select id, name, email, company, message, coalesce(phone, '') as phone, score, temperature, reason, next_action, meeting_at, created_at
+        from leads
+        order by created_at desc
+        limit 80
+      `;
+    } catch {
+      rows = await sql`
+        select id, name, email, company, message, score, temperature, reason, next_action, meeting_at, created_at
+        from leads
+        order by created_at desc
+        limit 80
+      `;
+    }
 
     return rows.map((row) => ({
       id: row.id,
@@ -274,6 +300,7 @@ export const listLeads = createServerFn({ method: "GET" })
       email: row.email,
       company: row.company,
       message: row.message,
+      phone: row.phone || "",
       score: Number(row.score),
       temperature: (row.temperature as LeadTemperature) || "frio",
       reason: row.reason,
