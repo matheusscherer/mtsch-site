@@ -8,12 +8,17 @@ import { notifyWebhook } from "@/lib/notify-webhook";
 import { notifyNotion } from "@/lib/notify-notion";
 import { notifyOps } from "@/lib/notify-ops";
 import { qualifyLead, type LeadQualification, type LeadTemperature } from "@/lib/qualify-lead";
-import { formatSlotLabel, isOfferedSlot, periodOf, proposeSlots, type MeetingSlot } from "@/lib/slots";
+import { formatSlotLabel, isOfferedSlot, periodOf, type MeetingSlot } from "@/lib/slots";
 import { meetingCalendarUrl } from "@/lib/calendar-link";
+import { isPlausibleEmail } from "@/lib/email";
 
 const leadSchema = z.object({
   name: z.string().trim().min(2, "Nome curto demais.").max(80),
-  email: z.string().trim().email("E-mail inválido.").max(120),
+  email: z
+    .string()
+    .trim()
+    .max(120)
+    .refine(isPlausibleEmail, "E-mail inválido."),
   company: z.string().trim().max(120).optional(),
   message: z.string().trim().min(2, "Conta o que automatizar.").max(2000),
 });
@@ -153,7 +158,6 @@ export const submitLead = createServerFn({ method: "POST" })
       temperature: qualification.temperature,
       nextAction: qualification.nextAction,
       emailSent,
-      slots: proposeSlots(),
     };
   });
 

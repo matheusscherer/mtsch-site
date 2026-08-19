@@ -34,7 +34,7 @@ export function Hero() {
         </p>
         <div className="rise-in mt-6 flex w-full max-w-full flex-col items-stretch justify-center gap-3 sm:mt-7 sm:w-auto sm:flex-row sm:items-center [animation-delay:200ms]">
           <Button size="lg" onClick={() => scrollToId("contato")}>
-            Agendar consultoria gratuita
+            Pedir consultoria gratuita
             <ArrowRight className="size-4" />
           </Button>
           <Button size="lg" variant="quiet" onClick={() => scrollToId("projetos")}>

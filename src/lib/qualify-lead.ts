@@ -103,10 +103,10 @@ export function qualifyLead(input: {
 
   const nextAction =
     temperature === "quente"
-      ? "Cabe ainda hoje"
+      ? "A gente analisa hoje e responde"
       : temperature === "morno"
-        ? "Olhamos isso nesta semana"
-        : "Sem pressa — se quiser conversar";
+        ? "A gente analisa e responde nesta semana"
+        : "A gente analisa — sem pressa";
 
   return {
     score,
