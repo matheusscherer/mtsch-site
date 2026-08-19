@@ -31,6 +31,7 @@ Documento operacional para celular e desktop. Atualizado em **2026-08-19**.
 - [x] Classificação automática quente / morno / frio (`src/lib/qualify-lead.ts`)
 - [x] Inbox autenticada em `/inbox`
 - [x] Webhook opcional para n8n (`N8N_WEBHOOK_URL`)
+- [x] Três horários no formulário + botão Google Agenda
 - [ ] `RESEND_API_KEY` na Vercel (você configura — passos abaixo)
 - [ ] Domínio verificado na Resend (para auto-resposta a qualquer lead)
 - [ ] `CALENDLY_URL` (opcional, entra no e-mail ao lead)

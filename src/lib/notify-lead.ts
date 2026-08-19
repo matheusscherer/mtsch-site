@@ -19,11 +19,11 @@ export type LeadNotifyPayload = {
  * - RESEND_FROM (opcional; default = onboarding@resend.dev)
  * - CALENDLY_URL (opcional; se existir, entra no e-mail de auto-resposta)
  */
-export async function notifyLead(payload: LeadNotifyPayload): Promise<void> {
+export async function notifyLead(payload: LeadNotifyPayload): Promise<boolean> {
   const apiKey = process.env.RESEND_API_KEY?.trim();
   if (!apiKey) {
     console.warn("[notify-lead] RESEND_API_KEY ausente — lead gravado, e-mail não enviado.");
-    return;
+    return false;
   }
 
   const toOwner = (process.env.LEAD_NOTIFY_EMAIL?.trim() || brand.email).toLowerCase();
@@ -92,6 +92,8 @@ export async function notifyLead(payload: LeadNotifyPayload): Promise<void> {
   } catch (err) {
     console.warn("[notify-lead] auto-resposta ao lead falhou (normal sem domínio verificado):", err);
   }
+
+  return true;
 }
 
 async function sendResend(opts: {

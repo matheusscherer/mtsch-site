@@ -103,10 +103,10 @@ export function qualifyLead(input: {
 
   const nextAction =
     temperature === "quente"
-      ? "Responder hoje e mandar a agenda"
+      ? "Escolhe um horário — prioridade hoje"
       : temperature === "morno"
-        ? "Responder em até 1 dia útil"
-        : "Resposta padrão, sem prioridade";
+        ? "Escolhe um dos 3 horários desta semana"
+        : "Pode escolher um horário, sem pressa";
 
   return {
     score,

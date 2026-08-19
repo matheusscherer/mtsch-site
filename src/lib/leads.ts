@@ -6,6 +6,8 @@ import { brand } from "@/lib/site";
 import { notifyLead } from "@/lib/notify-lead";
 import { notifyWebhook } from "@/lib/notify-webhook";
 import { qualifyLead, type LeadQualification, type LeadTemperature } from "@/lib/qualify-lead";
+import { formatSlotLabel, isOfferedSlot, proposeSlots, type MeetingSlot } from "@/lib/slots";
+import { meetingCalendarUrl } from "@/lib/calendar-link";
 
 const leadSchema = z.object({
   name: z.string().trim().min(2, "Nome curto demais.").max(80),
@@ -26,6 +28,7 @@ export type LeadRow = {
   temperature: LeadTemperature;
   reason: string;
   nextAction: string;
+  meetingAt: string | null;
   createdAt: string;
 };
 
@@ -80,8 +83,9 @@ export const submitLead = createServerFn({ method: "POST" })
       `;
     }
 
+    let emailSent = false;
     try {
-      await notifyLead({
+      emailSent = await notifyLead({
         name: data.name,
         email: data.email,
         company,
@@ -113,8 +117,65 @@ export const submitLead = createServerFn({ method: "POST" })
 
     return {
       ok: true as const,
+      leadId: id,
       temperature: qualification.temperature,
       nextAction: qualification.nextAction,
+      emailSent,
+      slots: proposeSlots(),
+    };
+  });
+
+const bookSchema = z.object({
+  leadId: z.string().uuid(),
+  start: z.string().min(10),
+});
+
+export const bookLeadSlot = createServerFn({ method: "POST" })
+  .validator((input: unknown) => bookSchema.parse(input))
+  .handler(async ({ data }) => {
+    if (!isOfferedSlot(data.start)) {
+      throw new Error("Esse horário não está mais disponível.");
+    }
+    const start = new Date(data.start);
+    const end = new Date(start.getTime() + 30 * 60 * 1000);
+    const sql = await getSql();
+    const rows = await sql<{
+      id: string;
+      name: string;
+      email: string;
+      company: string;
+      message: string;
+    }>`
+      select id, name, email, company, message from leads where id = ${data.leadId} limit 1
+    `;
+    const lead = rows[0];
+    if (!lead) throw new Error("Lead não encontrado.");
+
+    try {
+      await sql`
+        update leads set meeting_at = ${start.toISOString()} where id = ${lead.id}
+      `;
+    } catch (err) {
+      console.error("[bookLeadSlot] update meeting_at falhou:", err);
+    }
+
+    const slot: MeetingSlot = {
+      start: start.toISOString(),
+      end: end.toISOString(),
+      label: formatSlotLabel(start.toISOString()),
+    };
+
+    return {
+      ok: true as const,
+      slot,
+      calendarUrl: meetingCalendarUrl({
+        name: lead.name,
+        email: lead.email,
+        company: lead.company,
+        message: lead.message,
+        start,
+        end,
+      }),
     };
   });
 
@@ -139,9 +200,10 @@ export const listLeads = createServerFn({ method: "GET" })
       temperature: string;
       reason: string;
       next_action: string;
+      meeting_at: string | null;
       created_at: string;
     }>`
-      select id, name, email, company, message, score, temperature, reason, next_action, created_at
+      select id, name, email, company, message, score, temperature, reason, next_action, meeting_at, created_at
       from leads
       order by created_at desc
       limit 80
@@ -157,8 +219,9 @@ export const listLeads = createServerFn({ method: "GET" })
       temperature: (row.temperature as LeadTemperature) || "frio",
       reason: row.reason,
       nextAction: row.next_action,
+      meetingAt: row.meeting_at ? String(row.meeting_at) : null,
       createdAt: String(row.created_at),
     }));
   });
 
-export type { LeadQualification, LeadTemperature };
+export type { LeadQualification, LeadTemperature, MeetingSlot };

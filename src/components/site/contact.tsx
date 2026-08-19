@@ -4,15 +4,22 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
-import { submitLead, type LeadTemperature } from "@/lib/leads";
+import { bookLeadSlot, submitLead, type LeadTemperature, type MeetingSlot } from "@/lib/leads";
 import { brand } from "@/lib/site";
+
+type Result = {
+  leadId: string;
+  temperature: LeadTemperature;
+  nextAction: string;
+  emailSent: boolean;
+  slots: MeetingSlot[];
+  booked?: { label: string; calendarUrl: string };
+};
 
 export function Contact() {
   const [pending, setPending] = useState(false);
-  const [result, setResult] = useState<{
-    temperature: LeadTemperature;
-    nextAction: string;
-  } | null>(null);
+  const [booking, setBooking] = useState<string | null>(null);
+  const [result, setResult] = useState<Result | null>(null);
 
   async function onSubmit(e: FormEvent<HTMLFormElement>) {
     e.preventDefault();
@@ -42,8 +49,14 @@ export function Contact() {
     try {
       const res = await submitLead({ data: payload });
       form.reset();
-      setResult({ temperature: res.temperature, nextAction: res.nextAction });
-      toast.success(`Lead ${res.temperature}. ${res.nextAction}.`);
+      setResult({
+        leadId: res.leadId,
+        temperature: res.temperature,
+        nextAction: res.nextAction,
+        emailSent: res.emailSent,
+        slots: res.slots,
+      });
+      toast.success(`Lead ${res.temperature}. Escolhe um horário.`);
     } catch (err) {
       const raw = err instanceof Error ? err.message : "";
       const friendly = raw.includes("automatizar")
@@ -56,6 +69,23 @@ export function Contact() {
       toast.error(friendly);
     } finally {
       setPending(false);
+    }
+  }
+
+  async function pickSlot(slot: MeetingSlot) {
+    if (!result) return;
+    setBooking(slot.start);
+    try {
+      const booked = await bookLeadSlot({ data: { leadId: result.leadId, start: slot.start } });
+      setResult({
+        ...result,
+        booked: { label: booked.slot.label, calendarUrl: booked.calendarUrl },
+      });
+      toast.success("Horário reservado.");
+    } catch {
+      toast.error("Esse horário não rolou. Tenta outro.");
+    } finally {
+      setBooking(null);
     }
   }
 
@@ -72,7 +102,7 @@ export function Contact() {
             automatizar primeiro, o que deixar quieto.
           </p>
           <ul className="mt-8 space-y-2 text-sm text-fg-soft">
-            <li>Resposta em até 1 dia útil</li>
+            <li>Três horários na hora. 30 min.</li>
             <li>Porto Alegre · remoto no Brasil</li>
             <li>
               <a
@@ -92,7 +122,49 @@ export function Contact() {
               Classificado como {result.temperature}
             </h3>
             <p className="mt-3 text-sm leading-relaxed text-muted">{result.nextAction}.</p>
-            <Button type="button" className="mt-8" onClick={() => setResult(null)}>
+            <p className="mt-3 text-sm leading-relaxed text-muted">
+              O lead foi para a{" "}
+              <a href="/inbox" className="underline decoration-line underline-offset-4 hover:text-fg">
+                inbox
+              </a>
+              {result.emailSent
+                ? " e um e-mail saiu para a operação."
+                : ". E-mail ainda não dispara — falta a chave Resend na Vercel."}
+            </p>
+
+            {result.booked ? (
+              <div className="mt-8">
+                <p className="text-sm text-fg">Reservado: {result.booked.label}</p>
+                <Button asChild className="mt-4">
+                  <a href={result.booked.calendarUrl} target="_blank" rel="noreferrer">
+                    Abrir no Google Agenda
+                  </a>
+                </Button>
+              </div>
+            ) : (
+              <div className="mt-8">
+                <p className="text-micro text-muted uppercase">Três opções</p>
+                <div className="mt-3 grid gap-2">
+                  {result.slots.map((slot) => (
+                    <Button
+                      key={slot.start}
+                      type="button"
+                      variant="quiet"
+                      className="w-full justify-between"
+                      disabled={booking !== null}
+                      onClick={() => void pickSlot(slot)}
+                    >
+                      <span>{slot.label}</span>
+                      <span className="text-xs tracking-[0.14em] uppercase opacity-70">
+                        {booking === slot.start ? "…" : "30 min"}
+                      </span>
+                    </Button>
+                  ))}
+                </div>
+              </div>
+            )}
+
+            <Button type="button" variant="quiet" className="mt-6" onClick={() => setResult(null)}>
               Enviar outro
             </Button>
           </div>

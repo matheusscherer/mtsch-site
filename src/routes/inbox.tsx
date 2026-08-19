@@ -7,6 +7,8 @@ import { RedirectToSignIn } from "@/lib/auth/gates";
 import { signOut } from "@/lib/auth/client";
 import { useCurrentUserState } from "@/lib/auth/use-current-user";
 import { listLeads, type LeadRow, type LeadTemperature } from "@/lib/leads";
+import { meetingCalendarUrl } from "@/lib/calendar-link";
+import { proposeSlots } from "@/lib/slots";
 import { brand } from "@/lib/site";
 import { cn } from "@/lib/utils";
 
@@ -90,7 +92,7 @@ function InboxShell() {
         <p className="text-micro text-muted uppercase">Operação</p>
         <h1 className="font-display mt-3 text-title font-semibold text-fg">Leads classificados</h1>
         <p className="mt-3 max-w-xl text-sm leading-relaxed text-muted">
-          Quente, morno ou frio — por regras, no momento do envio. Sem planilha.
+          Aqui eles ficam. Responde por e-mail ou abre o horário no Google Agenda.
         </p>
 
         <div className="mt-8 flex flex-wrap gap-2">
@@ -130,33 +132,75 @@ function InboxShell() {
 
         <ul className="mt-8 space-y-3">
           {visible.map((lead) => (
-            <li key={lead.id} className="rounded-xl border border-line bg-bg-elevated p-5 sm:p-6">
-              <div className="flex flex-wrap items-start justify-between gap-3">
-                <div>
-                  <p className="font-display text-lg font-semibold text-fg">{lead.name}</p>
-                  <p className="mt-1 text-sm text-muted">
-                    {lead.company || "Sem empresa"}
-                    <span className="mx-2 text-line-strong">·</span>
-                    <a className="hover:text-fg" href={`mailto:${lead.email}`}>
-                      {lead.email}
-                    </a>
-                  </p>
-                </div>
-                <TempBadge value={lead.temperature} score={lead.score} />
-              </div>
-              <p className="mt-4 text-sm leading-relaxed text-fg-soft">{lead.message}</p>
-              <div className="mt-5 flex flex-wrap items-center gap-x-4 gap-y-2 border-t border-line pt-4 text-xs text-muted">
-                <span>{lead.nextAction}</span>
-                <span>{lead.reason}</span>
-                <span className="tabular-nums">
-                  {format(new Date(lead.createdAt), "d MMM yyyy · HH:mm", { locale: ptBR })}
-                </span>
-              </div>
-            </li>
+            <LeadCard key={lead.id} lead={lead} />
           ))}
         </ul>
       </main>
     </div>
+  );
+}
+
+function LeadCard({ lead }: { lead: LeadRow }) {
+  const start = lead.meetingAt ?? proposeSlots()[0]?.start;
+  const calendarUrl = start
+    ? meetingCalendarUrl({
+        name: lead.name,
+        email: lead.email,
+        company: lead.company,
+        message: lead.message,
+        start,
+      })
+    : null;
+  const mailto = `mailto:${lead.email}?subject=${encodeURIComponent(`MTSCH · ${lead.name}`)}&body=${encodeURIComponent(`Olá, ${lead.name.split(" ")[0] || lead.name}.\n\nRecebi teu pedido. Vamos falar 30 min sobre: ${lead.message}\n`)}`;
+
+  return (
+    <li className="rounded-xl border border-line bg-bg-elevated p-5 sm:p-6">
+      <div className="flex flex-wrap items-start justify-between gap-3">
+        <div>
+          <p className="font-display text-lg font-semibold text-fg">{lead.name}</p>
+          <p className="mt-1 text-sm text-muted">
+            {lead.company || "Sem empresa"}
+            <span className="mx-2 text-line-strong">·</span>
+            <a className="hover:text-fg" href={`mailto:${lead.email}`}>
+              {lead.email}
+            </a>
+          </p>
+        </div>
+        <TempBadge value={lead.temperature} score={lead.score} />
+      </div>
+      <p className="mt-4 text-sm leading-relaxed text-fg-soft">{lead.message}</p>
+      {lead.meetingAt ? (
+        <p className="mt-3 text-sm text-fg">
+          Horário pedido:{" "}
+          {format(new Date(lead.meetingAt), "d MMM · HH:mm", { locale: ptBR })}
+        </p>
+      ) : null}
+      <div className="mt-5 flex flex-wrap items-center gap-x-4 gap-y-2 border-t border-line pt-4 text-xs text-muted">
+        <span>{lead.nextAction}</span>
+        <span>{lead.reason}</span>
+        <span className="tabular-nums">
+          {format(new Date(lead.createdAt), "d MMM yyyy · HH:mm", { locale: ptBR })}
+        </span>
+      </div>
+      <div className="mt-4 flex flex-wrap gap-2">
+        <a
+          href={mailto}
+          className="inline-flex min-h-11 items-center rounded-full border border-line px-4 text-sm text-fg-soft transition-colors hover:border-fg hover:text-fg"
+        >
+          Responder
+        </a>
+        {calendarUrl ? (
+          <a
+            href={calendarUrl}
+            target="_blank"
+            rel="noreferrer"
+            className="inline-flex min-h-11 items-center rounded-full border border-fg bg-fg px-4 text-sm text-bg transition-colors hover:bg-fg-soft"
+          >
+            {lead.meetingAt ? "Abrir no Agenda" : "Agendar no Agenda"}
+          </a>
+        ) : null}
+      </div>
+    </li>
   );
 }
 
