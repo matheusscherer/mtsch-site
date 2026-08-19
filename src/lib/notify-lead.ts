@@ -76,7 +76,7 @@ export async function notifyLead(payload: LeadNotifyPayload): Promise<boolean> {
           : ""
       }
       <p style="margin:0 0 4px">— Matheus Scherer</p>
-      <p style="margin:0;font-size:13px;color:#666">MTSCH · Dados & Automação · Porto Alegre</p>
+      <p style="margin:0;font-size:13px;color:#666">MTSCH · Automação de processos · Porto Alegre</p>
     </div>
   `;
 

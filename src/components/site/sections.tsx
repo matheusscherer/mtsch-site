@@ -13,8 +13,8 @@ const services = [
   },
   {
     icon: Database,
-    title: "Dados e dashboards",
-    copy: "A operação em um painel sóbrio: receita, filas, falhas e o que precisa de decisão hoje.",
+    title: "Qualidade de base",
+    copy: "Duplicata, nulo, conta que não fecha. Relatório do que está errado — antes de qualquer automação.",
   },
 ];
 
@@ -28,15 +28,15 @@ const cases = [
     href: "https://github.com/matheusscherer/sales-report-automation",
   },
   {
-    tag: "Clínicas",
-    title: "Reativação de pacientes elegíveis",
-    copy: "Filtra quem fez o procedimento há X dias e ainda não retornou, normaliza telefone e gera lista pronta para WhatsApp.",
+    tag: "Base",
+    title: "Base vira lista de ação",
+    copy: "Filtra quem parou, limpa telefone, gera lista. Exemplo em clínica — o motor serve qualquer operação com base parada.",
     metric: "dry-run",
     metricLabel: "seguro por padrão, envio só com confirmação",
     href: "https://github.com/matheusscherer/mvp_clinicas",
   },
   {
-    tag: "Dados",
+    tag: "Auditoria",
     title: "Auditoria automática de bases",
     copy: "Duplicatas, nulos, outliers, datas inválidas e erros de cálculo — relatório em Markdown e achados no SQLite.",
     metric: "7 checks",
@@ -56,9 +56,9 @@ export function ProofBar() {
   return (
     <section className="border-y border-line bg-bg">
       <div className="mx-auto grid max-w-6xl grid-cols-1 divide-y divide-line sm:grid-cols-3 sm:divide-x sm:divide-y-0">
-        <Stat k="24/7" v="sistemas no ar, sem plantão humano" />
-        <Stat k="Python" v="automação robusta, observável e sua" />
-        <Stat k="Receita" v="menos custo operacional, mais ciclo fechado" />
+        <Stat k="Python" v="automação que tu consegue abrir e entender" />
+        <Stat k="Integração" v="usa o que a operação já tem" />
+        <Stat k="Revisão" v="nada dispara sem o dono ver" />
       </div>
     </section>
   );
@@ -79,8 +79,8 @@ export function Services() {
       <div className="mx-auto max-w-6xl">
         <SectionHead
           kicker="Serviços"
-          title="Do processo sujo ao sistema que fatura."
-          copy="Três frentes. Um critério: se não reduz trabalho repetido ou não aumenta receita, não entra."
+          title="Tiro o repetido. Devolvo rodando."
+          copy="Três frentes. Se não sai trabalho da mão, não entra."
         />
         <div className="mt-12 grid gap-3 md:grid-cols-3">
           {services.map((item) => (
@@ -124,8 +124,8 @@ export function Cases() {
       <div className="mx-auto max-w-6xl">
         <SectionHead
           kicker="Projetos"
-          title="Cases reais, código aberto."
-          copy="Três automações que já existem no GitHub — do comercial à reativação de pacientes e auditoria de dados."
+          title="Três processos. Código aberto."
+          copy="Relatório, lista de ação e auditoria de base. O nicho muda. O motor não."
         />
         <div className="mt-12 grid gap-3 lg:grid-cols-3">
           {cases.map((item) => (
