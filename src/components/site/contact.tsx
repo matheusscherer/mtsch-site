@@ -205,7 +205,10 @@ export function Contact() {
                 />
               </Field>
             </div>
-            <Button type="submit" className="mt-7 w-full sm:w-auto" disabled={pending}>
+            <p className="mt-7 text-sm leading-relaxed text-muted">
+              Primeira conversa: o que automatizar e o que deixar quieto.
+            </p>
+            <Button type="submit" className="mt-4 w-full sm:w-auto" disabled={pending}>
               {pending ? "Enviando…" : "Agendar reunião"}
             </Button>
           </form>
