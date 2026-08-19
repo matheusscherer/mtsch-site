@@ -1,6 +1,7 @@
 import { createServerFn } from "@tanstack/react-start";
 import { z } from "zod";
 import { getSql } from "@/lib/db";
+import { notifyLead } from "@/lib/notify-lead";
 
 const leadSchema = z.object({
   name: z.string().trim().min(2).max(80),
@@ -14,6 +15,7 @@ export type LeadInput = z.infer<typeof leadSchema>;
 export const submitLead = createServerFn({ method: "POST" })
   .validator((input: unknown) => leadSchema.parse(input))
   .handler(async ({ data }) => {
+    const company = data.company ?? "";
     const sql = await getSql();
     await sql`
       insert into leads (id, name, email, company, message)
@@ -21,9 +23,22 @@ export const submitLead = createServerFn({ method: "POST" })
         ${crypto.randomUUID()},
         ${data.name},
         ${data.email},
-        ${data.company ?? ""},
+        ${company},
         ${data.message}
       )
     `;
+
+    // E-mail é best-effort: lead já está salvo.
+    try {
+      await notifyLead({
+        name: data.name,
+        email: data.email,
+        company,
+        message: data.message,
+      });
+    } catch (err) {
+      console.error("[submitLead] notifyLead falhou:", err);
+    }
+
     return { ok: true as const };
   });
