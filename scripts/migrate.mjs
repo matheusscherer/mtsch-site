@@ -25,7 +25,12 @@ if (!databaseUrl) {
 const migrationsDir = join(dirname(fileURLToPath(import.meta.url)), "..", "migrations");
 
 async function main() {
-  const pool = new pg.Pool({ connectionString: databaseUrl, max: 1 });
+  const pool = new pg.Pool({
+    connectionString: databaseUrl,
+    ssl: { rejectUnauthorized: false },
+    max: 1,
+    connectionTimeoutMillis: 10000,
+  });
   const client = await pool.connect();
   try {
     await client.query(
