@@ -2,10 +2,11 @@
 
 Landing page de conversão da marca **MTSCH**. Dark mode premium, hero com hierarquia editorial e captura de leads.
 
+**Produção:** https://mtsch-site.vercel.app  
 **Problema:** processos manuais e presença digital genérica não convertem reunião.  
-**Solução:** uma página única, rápida e sóbria, com CTA claro e formulário persistido.  
+**Solução:** uma página única, rápida e sóbria, com CTA claro e formulário persistido na Neon.  
 **Stack:** React 19 · TypeScript · TanStack Start · Tailwind v4 · Postgres (Neon / PGLite).  
-**Resultado:** preview funcional, build de produção verde, repositório e documentação prontos para ir ao ar.
+**Resultado:** site no ar, leads gravando, repositório e documentação prontos para o próximo passo (e-mail + agenda).
 
 ## Stack
 
@@ -39,20 +40,27 @@ src/
 migrations/
   0001_auth.sql
   0002_leads.sql
+docs/
+  DEPLOY.md              # Vercel + Neon
+  ENGINEERING.md         # contrato sênior
+  LEADS-E-AUTOMACAO.md   # operação de leads + pipeline e-mail/agenda
 ```
+
+## Documentação
+
+| Doc | Para quê |
+| --- | --- |
+| [docs/LEADS-E-AUTOMACAO.md](docs/LEADS-E-AUTOMACAO.md) | Ver leads, variáveis, próximo passo (e-mail, Calendly, n8n) |
+| [docs/DEPLOY.md](docs/DEPLOY.md) | Deploy Vercel + `DATABASE_URL` |
+| [docs/ENGINEERING.md](docs/ENGINEERING.md) | Decisões de engenharia |
 
 ## Ir ao ar (Vercel)
 
-O projeto **já está pronto para Vercel**. Duas rotas:
+Projeto **já em produção**. Para recriar ou outro ambiente: [docs/DEPLOY.md](docs/DEPLOY.md).
 
-1. **Publicar pelo Grok** — sobe o mesmo build na infraestrutura gerenciada.
-2. **Sua conta Vercel** — Import Project apontando para este repo. Passos em [docs/DEPLOY.md](docs/DEPLOY.md).
+Variável obrigatória em Production: `DATABASE_URL` (Neon, preferir pooled + SSL).
 
-Não commitar `.env`. Variáveis só no painel da Vercel / Neon.
-
-## Boas práticas
-
-Documentação de engenharia sênior: [docs/ENGINEERING.md](docs/ENGINEERING.md).
+Não commitar `.env`.
 
 ## Licença
 
