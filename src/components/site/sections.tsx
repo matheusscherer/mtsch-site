@@ -21,24 +21,27 @@ const services = [
 const cases = [
   {
     tag: "Comercial",
-    title: "Pipeline que não dorme",
-    copy: "Leads do WhatsApp entram no CRM, recebem follow-up e só sobem para o time quando estão quentes.",
-    metric: "3,2×",
-    metricLabel: "respostas no prazo",
+    title: "Relatório de vendas automatizado",
+    copy: "Shopify + Mercado Livre consolidados, métricas calculadas e resumo diário publicado no Notion — sem planilha manual.",
+    metric: "1 clique",
+    metricLabel: "em vez de horas de consolidação",
+    href: "https://github.com/matheusscherer/sales-report-automation",
   },
   {
-    tag: "Financeiro",
-    title: "Fechamento sem caça ao arquivo",
-    copy: "Conciliação, notas e relatórios gerados de madrugada. O time começa o dia com o número certo.",
-    metric: "18h",
-    metricLabel: "liberadas / mês",
+    tag: "Clínicas",
+    title: "Reativação de pacientes elegíveis",
+    copy: "Filtra quem fez o procedimento há X dias e ainda não retornou, normaliza telefone e gera lista pronta para WhatsApp.",
+    metric: "dry-run",
+    metricLabel: "seguro por padrão, envio só com confirmação",
+    href: "https://github.com/matheusscherer/mvp_clinicas",
   },
   {
-    tag: "Operações",
-    title: "Fábrica com pulso 24/7",
-    copy: "Estoque, pedidos e exceções em um fluxo só. Quando algo quebra, o alerta chega antes do cliente.",
-    metric: "99.9%",
-    metricLabel: "jobs no SLA",
+    tag: "Dados",
+    title: "Auditoria automática de bases",
+    copy: "Duplicatas, nulos, outliers, datas inválidas e erros de cálculo — relatório em Markdown e achados no SQLite.",
+    metric: "7 checks",
+    metricLabel: "por execução, sem caça manual",
+    href: "https://github.com/matheusscherer/validador_dados",
   },
 ];
 
@@ -121,13 +124,16 @@ export function Cases() {
       <div className="mx-auto max-w-6xl">
         <SectionHead
           kicker="Projetos"
-          title="Cases que pagam o próprio projeto."
-          copy="Recortes do tipo de operação que construímos — do comercial ao chão de fábrica."
+          title="Cases reais, código aberto."
+          copy="Três automações que já existem no GitHub — do comercial à reativação de pacientes e auditoria de dados."
         />
         <div className="mt-12 grid gap-3 lg:grid-cols-3">
           {cases.map((item) => (
-            <article
+            <a
               key={item.title}
+              href={item.href}
+              target="_blank"
+              rel="noreferrer"
               className="group flex flex-col rounded-xl border border-line bg-bg-elevated p-6 transition-[border-color] duration-200 hover:border-line-strong sm:p-7"
             >
               <div className="flex items-center justify-between">
@@ -142,7 +148,7 @@ export function Cases() {
                 </p>
                 <p className="mt-1 text-xs tracking-wide text-muted">{item.metricLabel}</p>
               </div>
-            </article>
+            </a>
           ))}
         </div>
       </div>

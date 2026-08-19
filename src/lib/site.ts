@@ -14,6 +14,10 @@ export const navItems = [
 
 export const socials = [
   { label: "GitHub", href: "https://github.com/matheusscherer", kind: "github" as const },
-  { label: "LinkedIn", href: "https://www.linkedin.com", kind: "linkedin" as const },
+  {
+    label: "LinkedIn",
+    href: "https://linkedin.com/in/scherermatheus",
+    kind: "linkedin" as const,
+  },
   { label: "X", href: "https://x.com/mattschererr", kind: "x" as const },
 ];

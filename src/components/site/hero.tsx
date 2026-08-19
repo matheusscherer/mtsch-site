@@ -34,11 +34,11 @@ export function Hero() {
         </p>
         <div className="rise-in mt-6 flex w-full max-w-full flex-col items-stretch justify-center gap-3 sm:mt-7 sm:w-auto sm:flex-row sm:items-center [animation-delay:200ms]">
           <Button size="lg" onClick={() => scrollToId("contato")}>
-            Consultoria Gratuita
+            Agendar consultoria gratuita
             <ArrowRight className="size-4" />
           </Button>
           <Button size="lg" variant="quiet" onClick={() => scrollToId("projetos")}>
-            Ver Portfólio de Cases
+            Ver cases reais
           </Button>
         </div>
         <div className="mt-6 w-full max-w-sm overflow-x-clip sm:mt-8 sm:max-w-xl md:absolute md:inset-x-0 md:bottom-0 md:mt-0 md:max-w-none">

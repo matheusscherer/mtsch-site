@@ -49,7 +49,10 @@ export function Contact() {
             <li>Resposta em até 1 dia útil</li>
             <li>Porto Alegre · remoto no Brasil</li>
             <li>
-              <a className="underline decoration-line underline-offset-4 hover:text-fg" href={`mailto:${brand.email}`}>
+              <a
+                className="underline decoration-line underline-offset-4 hover:text-fg"
+                href={`mailto:${brand.email}`}
+              >
                 {brand.email}
               </a>
             </li>
@@ -74,7 +77,12 @@ export function Contact() {
           </div>
           <div className="mt-5">
             <Field label="Empresa" htmlFor="company">
-              <Input id="company" name="company" autoComplete="organization" placeholder="Opcional" />
+              <Input
+                id="company"
+                name="company"
+                autoComplete="organization"
+                placeholder="Opcional"
+              />
             </Field>
           </div>
           <div className="mt-5">
