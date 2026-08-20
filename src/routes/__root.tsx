@@ -17,7 +17,7 @@ export const Route = createRootRoute({
       {
         name: "description",
         content:
-          "Automatize negócios. Cresça agora. Python em Porto Alegre.",
+          "Automação de planilhas e qualidade de dados com Python. Porto Alegre. Código aberto.",
       },
       { name: "apple-mobile-web-app-title", content: APP_NAME },
       { name: "theme-color", content: "#000000" },

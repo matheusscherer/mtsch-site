@@ -66,7 +66,7 @@ export function Contact() {
       if (openWa && wa) window.open(wa, "_blank", "noopener,noreferrer");
       form.reset();
       setResult({ wa });
-      toast.success("Recebi. A gente analisa e responde.");
+      toast.success("Recebi. Eu analiso e respondo.");
     } catch (err) {
       const raw = err instanceof Error ? err.message : "";
       const friendly = raw.includes("WhatsApp")
@@ -98,11 +98,11 @@ export function Contact() {
             Consultoria gratuita. Sem pitch de 40 slides.
           </h2>
           <p className="mt-4 max-w-md text-sm leading-relaxed text-muted sm:text-base">
-            Conte o processo que está te custando tempo. A gente analisa e responde com um recorte
+            Conte o processo que está te custando tempo. Eu analiso e respondo com um recorte
             honesto: o que automatizar primeiro, o que deixar quieto.
           </p>
           <ul className="mt-8 space-y-2 text-sm text-fg-soft">
-            <li>A gente olha o processo e te diz o primeiro corte.</li>
+            <li>Eu olho o processo e te digo o primeiro corte.</li>
             <li>Porto Alegre · remoto no Brasil</li>
             {hasWhatsapp() && directWa ? (
               <li>
@@ -132,7 +132,7 @@ export function Contact() {
             <p className="text-micro text-muted uppercase">Pedido recebido</p>
             <h3 className="font-display mt-3 text-xl font-semibold text-fg">Recebi.</h3>
             <p className="mt-3 text-sm leading-relaxed text-muted">
-              A gente analisa e te responde. Se quiser, já chama no WhatsApp.
+              Eu analiso e te respondo. Se quiser, já chama no WhatsApp.
             </p>
             {result.wa ? (
               <Button asChild className="mt-8 w-full sm:w-auto">

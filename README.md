@@ -1,9 +1,9 @@
 # MTSCH — site
 
-Site de [Matheus Scherer](https://github.com/matheusscherer). Automação de processos. Porto Alegre.
+Página de [Matheus Scherer](https://github.com/matheusscherer). Automação de planilhas e qualidade de dados. Porto Alegre.
 
 **No ar:** https://mtsch-site.vercel.app
 
-Não é o produto. É a página. O produto é o processo rodando — ver os repos de relatório, auditoria e lista de ação.
+Não é o produto. É a página. O produto é o script — ver `validador_dados`, `sales-report-automation` e `mvp_clinicas`.
 
-Python + Pandas no trabalho. Este repo é o site (React).
+Exemplos no site usam dado sintético. Não há métrica de receita, jobs ou uptime.

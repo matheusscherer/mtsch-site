@@ -4,12 +4,12 @@ const services = [
   {
     icon: Workflow,
     title: "Automação em Python",
-    copy: "Bots, filas e rotinas que substituem planilha, e-mail e retrabalho — com logs, alertas e dono claro.",
+    copy: "Script que lê planilha, aplica regra e devolve arquivo. Log quando precisa. Dry-run quando há envio.",
   },
   {
     icon: GitMerge,
-    title: "Integração de sistemas",
-    copy: "ERP, CRM, fiscal, pagamentos e planilhas falando a mesma língua. Menos cola manual, mais fluxo.",
+    title: "Consolida o que já existe",
+    copy: "CSV, Excel e o que a operação já exporta. Notion opcional. Não é ERP nem fiscal de prateleira.",
   },
   {
     icon: Database,
@@ -21,35 +21,35 @@ const services = [
 const cases = [
   {
     tag: "Comercial",
-    title: "Relatório de vendas automatizado",
-    copy: "Shopify + Mercado Livre consolidados, métricas calculadas e resumo diário publicado no Notion — sem planilha manual.",
-    metric: "1 clique",
-    metricLabel: "em vez de horas de consolidação",
+    title: "Relatório de vendas",
+    copy: "Dois CSVs no mesmo schema (exemplo com nomes Shopify e Mercado Livre) viram um resumo. Notion só com flag. Não é API dos marketplaces.",
+    metric: "CSV → CSV",
+    metricLabel: "exemplo sintético, código aberto",
     href: "https://github.com/matheusscherer/sales-report-automation",
   },
   {
     tag: "Base",
     title: "Base vira lista de ação",
-    copy: "Filtra quem parou, limpa telefone, gera lista. Exemplo em clínica — o motor serve qualquer operação com base parada.",
+    copy: "Filtra quem parou, limpa telefone, gera lista. Exemplo em clínica com dado fictício. Envio desligado por padrão.",
     metric: "dry-run",
-    metricLabel: "seguro por padrão, envio só com confirmação",
+    metricLabel: "nada dispara sem confirmação",
     href: "https://github.com/matheusscherer/mvp_clinicas",
   },
   {
     tag: "Auditoria",
-    title: "Auditoria automática de bases",
-    copy: "Duplicatas, nulos, outliers, datas inválidas e erros de cálculo — relatório em Markdown e achados no SQLite.",
+    title: "Auditoria de bases",
+    copy: "Duplicatas, nulos, outliers, datas inválidas e qtd × unitário ≠ total. Relatório em Markdown e SQLite. Base sintético.",
     metric: "7 checks",
-    metricLabel: "por execução, sem caça manual",
+    metricLabel: "exemplo gerado pelo próprio código",
     href: "https://github.com/matheusscherer/validador_dados",
   },
 ];
 
 const steps = [
-  { n: "01", title: "Diagnóstico", copy: "Mapeamos o processo real — não o organograma." },
-  { n: "02", title: "Arquitetura", copy: "Desenhamos o menor sistema que resolve o gargalo." },
-  { n: "03", title: "Implementação", copy: "Python, APIs e painéis. Sem teatro de slides." },
-  { n: "04", title: "Escala", copy: "Monitoramos, medimos e só então expandimos." },
+  { n: "01", title: "Diagnóstico", copy: "Olho o processo real — não o organograma." },
+  { n: "02", title: "Recorte", copy: "O menor script que tira trabalho da mão." },
+  { n: "03", title: "Implementação", copy: "Python, arquivo, relatório. Sem teatro." },
+  { n: "04", title: "Revisão", copy: "Você vê o resultado antes de qualquer envio." },
 ];
 
 export function ProofBar() {
@@ -125,7 +125,7 @@ export function Cases() {
         <SectionHead
           kicker="Projetos"
           title="Três processos. Código aberto."
-          copy="Relatório, lista de ação e auditoria de base. O nicho muda. O motor não."
+          copy="Relatório, lista de ação e auditoria. Exemplos com dado sintético — não são clientes."
         />
         <div className="mt-12 grid gap-3 lg:grid-cols-3">
           {cases.map((item) => (

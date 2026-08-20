@@ -45,20 +45,19 @@ function DashboardScreen() {
         <div className="flex min-w-0 flex-1 flex-col p-3 sm:p-4">
           <div className="mb-3 flex items-center justify-between gap-2">
             <div className="min-w-0">
-              <p className="text-micro text-muted uppercase">Operação</p>
+              <p className="text-micro text-muted uppercase">Validador</p>
               <p className="truncate text-xs font-medium text-fg-soft sm:text-sm">
-                Receita em tempo real
+                Exemplo sintético — não é cliente
               </p>
             </div>
             <span className="inline-flex shrink-0 items-center gap-1.5 rounded-full border border-line px-2 py-1 text-micro text-fg-soft">
-              <span className="size-1.5 rounded-full bg-fg" />
-              ao vivo
+              código aberto
             </span>
           </div>
           <div className="mb-3 grid grid-cols-3 gap-2">
-            <Kpi label="Receita" value="128k" />
-            <Kpi label="Jobs" value="47" />
-            <Kpi label="Uptime" value="99.9" />
+            <Kpi label="Entra" value="CSV" />
+            <Kpi label="Checa" value="7" />
+            <Kpi label="Sai" value=".md" />
           </div>
           <div className="relative min-h-0 flex-1 overflow-hidden rounded-sm border border-line bg-bg p-2">
             <AreaChart />
@@ -107,11 +106,11 @@ function Phone() {
       <div className="overflow-hidden rounded-lg border border-line bg-bg">
         <div className="relative aspect-9/16 px-2.5 pt-4 pb-3">
           <span className="absolute top-1.5 left-1/2 h-1.5 w-10 -translate-x-1/2 rounded-full bg-device-edge" />
-          <p className="mt-3 text-micro text-muted uppercase">Filas</p>
-          <p className="mb-2 text-xs font-medium text-fg">Automações</p>
-          <FeedRow title="Pedido #1842" meta="ERP → fiscal" />
-          <FeedRow title="Lead qualificado" meta="CRM atualizado" />
-          <FeedRow title="Alerta de estoque" meta="Slack · 2m" />
+          <p className="mt-3 text-micro text-muted uppercase">Achados</p>
+          <p className="mb-2 text-xs font-medium text-fg">Auditoria</p>
+          <FeedRow title="Duplicata" meta="2 registros" />
+          <FeedRow title="Nulo crítico" meta="vendedor / unitário" />
+          <FeedRow title="Conta não fecha" meta="qtd × preço" />
         </div>
       </div>
     </div>
