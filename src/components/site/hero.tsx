@@ -1,3 +1,4 @@
+import { Link } from "@tanstack/react-router";
 import { ArrowRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { DeviceStage } from "@/components/site/devices";
@@ -37,8 +38,8 @@ export function Hero() {
             Pedir proposta
             <ArrowRight className="size-4" />
           </Button>
-          <Button size="lg" variant="quiet" onClick={() => scrollToId("projetos")}>
-            Ver o case
+          <Button asChild size="lg" variant="quiet">
+            <Link to="/hora-extra">Ver o case</Link>
           </Button>
         </div>
         <div className="mt-6 w-full max-w-sm overflow-x-clip sm:mt-8 sm:max-w-xl md:absolute md:inset-x-0 md:bottom-0 md:mt-0 md:max-w-none">
