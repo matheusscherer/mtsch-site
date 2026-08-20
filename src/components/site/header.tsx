@@ -64,7 +64,7 @@ export function Header() {
             </Link>
           </SignedIn>
           <Button size="sm" onClick={() => go("contato")}>
-            Falar agora
+            Agendar reunião
           </Button>
         </nav>
 
@@ -105,7 +105,7 @@ export function Header() {
               </Link>
             </SignedIn>
             <Button className="mt-3 w-full" onClick={() => go("contato")}>
-              Falar agora
+              Agendar reunião
             </Button>
           </nav>
         </div>
