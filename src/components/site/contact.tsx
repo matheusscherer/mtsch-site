@@ -35,7 +35,7 @@ function validate(payload: Payload): string | null {
   if (payload.name.length < 2) return "Coloca teu nome.";
   if (!isPlausibleEmail(payload.email)) return "E-mail inválido — usa um endereço real.";
   if (payload.phone && !parseBrMobile(payload.phone)) return "WhatsApp inválido — DDD + 9 dígitos.";
-  if (payload.message.length < 2) return "Conta o que automatizar — uma frase já serve.";
+  if (payload.message.length < 2) return "Conta o processo — uma frase já serve.";
   return null;
 }
 
@@ -66,18 +66,16 @@ export function Contact() {
       if (openWa && wa) window.open(wa, "_blank", "noopener,noreferrer");
       form.reset();
       setResult({ wa });
-      toast.success("Recebi. Eu analiso e respondo.");
+      toast.success("Recebi. Te devolvo recorte e valor.");
     } catch (err) {
       const raw = err instanceof Error ? err.message : "";
       const friendly = raw.includes("WhatsApp")
         ? "WhatsApp inválido — DDD + 9 dígitos."
-        : raw.includes("automatizar")
-          ? "Conta o que automatizar — uma frase já serve."
-          : raw.includes("E-mail")
-            ? "E-mail inválido — usa um endereço real."
-            : raw.includes("Nome")
-              ? "Coloca teu nome."
-              : "Não foi possível enviar. Tente de novo em instantes.";
+        : raw.includes("E-mail")
+          ? "E-mail inválido — usa um endereço real."
+          : raw.includes("Nome")
+            ? "Coloca teu nome."
+            : "Não foi possível enviar. Tente de novo em instantes.";
       toast.error(friendly);
     } finally {
       setPending(false);
@@ -93,16 +91,16 @@ export function Contact() {
     <section id="contato" className="scroll-mt-24 border-t border-line bg-bg px-5 py-20 sm:px-6 sm:py-24">
       <div className="mx-auto grid max-w-6xl gap-12 lg:grid-cols-[1fr_1.1fr] lg:gap-20">
         <div>
-          <p className="text-micro text-muted uppercase">Contato</p>
+          <p className="text-micro text-muted uppercase">Contratar</p>
           <h2 className="font-display mt-3 text-title font-semibold text-fg">
-            Consultoria gratuita. Sem pitch de 40 slides.
+            Valor combinado antes. Sem trabalho de graça.
           </h2>
           <p className="mt-4 max-w-md text-sm leading-relaxed text-muted sm:text-base">
-            Conte o processo que está te custando tempo. Eu analiso e respondo com um recorte
-            honesto: o que automatizar primeiro, o que deixar quieto.
+            Você manda o processo. Eu devolvo o recorte e o preço. Se fechar, eu faço.
           </p>
           <ul className="mt-8 space-y-2 text-sm text-fg-soft">
-            <li>Eu olho o processo e te digo o primeiro corte.</li>
+            <li>Diagnóstico de hora extra, custo e planilha de operação.</li>
+            <li>Automação de relatório em Python — CSV entra, tese sai.</li>
             <li>Porto Alegre · remoto no Brasil</li>
             {hasWhatsapp() && directWa ? (
               <li>
@@ -132,7 +130,7 @@ export function Contact() {
             <p className="text-micro text-muted uppercase">Pedido recebido</p>
             <h3 className="font-display mt-3 text-xl font-semibold text-fg">Recebi.</h3>
             <p className="mt-3 text-sm leading-relaxed text-muted">
-              Eu analiso e te respondo. Se quiser, já chama no WhatsApp.
+              Te devolvo recorte e valor. Se quiser, já chama no WhatsApp.
             </p>
             {result.wa ? (
               <Button asChild className="mt-8 w-full sm:w-auto">
@@ -184,22 +182,22 @@ export function Contact() {
               </Field>
             </div>
             <div className="mt-5">
-              <Field label="O que automatizar" htmlFor="message">
+              <Field label="O processo" htmlFor="message">
                 <Textarea
                   id="message"
                   name="message"
                   required
                   minLength={2}
-                  placeholder="Ex.: fechamento financeiro, leads do WhatsApp, estoque…"
+                  placeholder="Ex.: hora extra, fechamento, planilha que ninguém fecha…"
                 />
               </Field>
             </div>
             <p className="mt-7 text-sm leading-relaxed text-muted">
-              Primeira conversa: o que automatizar e o que deixar quieto.
+              Primeira resposta: o que eu faria e quanto custa. Trabalho só depois disso.
             </p>
             <div className="mt-4 flex flex-col gap-3 sm:flex-row sm:items-center">
               <Button type="submit" className="w-full sm:w-auto" disabled={pending}>
-                {pending ? "Enviando…" : "Enviar pedido"}
+                {pending ? "Enviando…" : "Pedir proposta"}
               </Button>
               <Button
                 type="button"
