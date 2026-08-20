@@ -124,10 +124,43 @@ export function Cases() {
       <div className="mx-auto max-w-6xl">
         <SectionHead
           kicker="Projetos"
-          title="Três processos. Código aberto."
-          copy="Relatório, lista de ação e auditoria. Exemplos com dado sintético — não são clientes."
+          title="Um case real. Três exemplos abertos."
+          copy="O primeiro é recorte operacional de 30 dias — números reais, contas por setor. Os outros três são sintéticos."
         />
-        <div className="mt-12 grid gap-3 lg:grid-cols-3">
+
+        <a
+          href="https://ever-winter-fleet-zest.grok.me"
+          target="_blank"
+          rel="noreferrer"
+          className="group mt-12 flex flex-col rounded-xl border border-line bg-bg-elevated p-6 transition-[border-color] duration-200 hover:border-line-strong sm:p-8 lg:flex-row lg:items-end lg:justify-between lg:gap-10"
+        >
+          <div className="max-w-xl">
+            <div className="flex items-center justify-between gap-3">
+              <span className="text-micro text-muted uppercase">Operação · 30 dias</span>
+              <ArrowUpRight className="size-4 text-muted transition-transform duration-200 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 lg:hidden" />
+            </div>
+            <h3 className="font-display mt-5 text-2xl font-semibold tracking-tight text-fg sm:text-3xl">
+              O extra não é abuso. É posto vago.
+            </h3>
+            <p className="mt-4 text-sm leading-relaxed text-muted sm:text-base">
+              4.110 h tratadas à mão, 100% categorizadas. 55,5% falta de efetivo.
+              Contas por setor, sem nome. Deck executivo + Pandas no GitHub.
+            </p>
+            <p className="mt-4 text-xs tracking-wide text-muted">
+              Código: github.com/matheusscherer/diagnostico-custo-hora-extra
+            </p>
+          </div>
+          <div className="mt-8 border-t border-line pt-5 lg:mt-0 lg:border-t-0 lg:pt-0 lg:text-right">
+            <p className="font-display text-4xl font-semibold tabular-nums tracking-tight text-fg">
+              42,7%
+            </p>
+            <p className="mt-2 max-w-[14rem] text-xs tracking-wide text-muted lg:ml-auto">
+              das vagas fechadas sem um dia de exposição a extra
+            </p>
+          </div>
+        </a>
+
+        <div className="mt-3 grid gap-3 lg:grid-cols-3">
           {cases.map((item) => (
             <a
               key={item.title}
