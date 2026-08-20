@@ -1,3 +1,4 @@
+import { Link } from "@tanstack/react-router";
 import { ArrowUpRight, Database, GitMerge, Workflow } from "lucide-react";
 
 const services = [
@@ -128,10 +129,8 @@ export function Cases() {
           copy="O primeiro é recorte operacional de 30 dias — números reais, contas por setor. Os outros três são sintéticos."
         />
 
-        <a
-          href="https://ever-winter-fleet-zest.grok.me"
-          target="_blank"
-          rel="noreferrer"
+        <Link
+          to="/hora-extra"
           className="group mt-12 flex flex-col rounded-xl border border-line bg-bg-elevated p-6 transition-[border-color] duration-200 hover:border-line-strong sm:p-8 lg:flex-row lg:items-end lg:justify-between lg:gap-10"
         >
           <div className="max-w-xl">
@@ -144,10 +143,10 @@ export function Cases() {
             </h3>
             <p className="mt-4 text-sm leading-relaxed text-muted sm:text-base">
               4.110 h tratadas à mão, 100% categorizadas. 55,5% falta de efetivo.
-              Contas por setor, sem nome. Deck executivo + Pandas no GitHub.
+              Contas por setor, sem nome. Relatório no site + Pandas no GitHub.
             </p>
             <p className="mt-4 text-xs tracking-wide text-muted">
-              Código: github.com/matheusscherer/diagnostico-custo-hora-extra
+              github.com/matheusscherer/diagnostico-custo-hora-extra
             </p>
           </div>
           <div className="mt-8 border-t border-line pt-5 lg:mt-0 lg:border-t-0 lg:pt-0 lg:text-right">
@@ -158,7 +157,7 @@ export function Cases() {
               das vagas fechadas sem um dia de exposição a extra
             </p>
           </div>
-        </a>
+        </Link>
 
         <div className="mt-3 grid gap-3 lg:grid-cols-3">
           {cases.map((item) => (
