@@ -48,7 +48,7 @@ function HoraExtraPage() {
             hash="contato"
             className="inline-flex min-h-10 items-center rounded-full border border-line-strong px-4 text-sm text-fg hover:bg-fg hover:text-bg"
           >
-            Pedir proposta
+            Contato
           </Link>
         </div>
       </header>
@@ -164,15 +164,15 @@ function HoraExtraPage() {
 
         <section className="mt-14 flex flex-col gap-4 border-t border-line pt-10 sm:flex-row sm:items-center sm:justify-between">
           <div>
-            <p className="font-display text-xl font-semibold text-fg">Isso no teu ciclo, com valor combinado antes.</p>
+            <p className="font-display text-xl font-semibold text-fg">O recorte e o código estão abertos.</p>
             <p className="mt-2 max-w-md text-sm text-muted">
-              Python no GitHub. Planilha entra, tese sai. Sem trabalho de graça.
+              Recrutamento ou operação: é só chamar.
             </p>
           </div>
           <div className="flex flex-col gap-3 sm:flex-row">
             <Button asChild size="lg">
               <Link to="/" hash="contato">
-                Pedir proposta
+                Contato
               </Link>
             </Button>
             <Button asChild size="lg" variant="quiet">
