@@ -35,7 +35,7 @@ function validate(payload: Payload): string | null {
   if (payload.name.length < 2) return "Coloca teu nome.";
   if (!isPlausibleEmail(payload.email)) return "E-mail inválido — usa um endereço real.";
   if (payload.phone && !parseBrMobile(payload.phone)) return "WhatsApp inválido — DDD + 9 dígitos.";
-  if (payload.message.length < 2) return "Conta o processo — uma frase já serve.";
+  if (payload.message.length < 2) return "Uma frase já serve.";
   return null;
 }
 
@@ -66,7 +66,7 @@ export function Contact() {
       if (openWa && wa) window.open(wa, "_blank", "noopener,noreferrer");
       form.reset();
       setResult({ wa });
-      toast.success("Recebi. Te devolvo recorte e valor.");
+      toast.success("Recebi. Te retorno em breve.");
     } catch (err) {
       const raw = err instanceof Error ? err.message : "";
       const friendly = raw.includes("WhatsApp")
@@ -91,12 +91,12 @@ export function Contact() {
     <section id="contato" className="scroll-mt-24 border-t border-line bg-bg px-5 py-20 sm:px-6 sm:py-24">
       <div className="mx-auto grid max-w-6xl gap-12 lg:grid-cols-[1fr_1.1fr] lg:gap-20">
         <div>
-          <p className="text-micro text-muted uppercase">Contratar</p>
+          <p className="text-micro text-muted uppercase">Contato</p>
           <h2 className="font-display mt-3 text-title font-semibold text-fg">
-            Valor combinado antes. Sem trabalho de graça.
+            Recrutamento, projeto ou operação.
           </h2>
           <p className="mt-4 max-w-md text-sm leading-relaxed text-muted sm:text-base">
-            Você manda o processo. Eu devolvo o recorte e o preço. Se fechar, eu faço.
+            Respondo com o que eu faria no recorte. Python, custo operacional, planilha que não fecha.
           </p>
           <ul className="mt-8 space-y-2 text-sm text-fg-soft">
             <li>Diagnóstico de hora extra, custo e planilha de operação.</li>
@@ -127,10 +127,10 @@ export function Contact() {
 
         {result ? (
           <div className="rounded-xl border border-line bg-bg-elevated p-6 sm:p-8">
-            <p className="text-micro text-muted uppercase">Pedido recebido</p>
+            <p className="text-micro text-muted uppercase">Recebido</p>
             <h3 className="font-display mt-3 text-xl font-semibold text-fg">Recebi.</h3>
             <p className="mt-3 text-sm leading-relaxed text-muted">
-              Te devolvo recorte e valor. Se quiser, já chama no WhatsApp.
+              Te retorno em breve. Se quiser, chama no WhatsApp.
             </p>
             {result.wa ? (
               <Button asChild className="mt-8 w-full sm:w-auto">
@@ -182,22 +182,19 @@ export function Contact() {
               </Field>
             </div>
             <div className="mt-5">
-              <Field label="O processo" htmlFor="message">
+              <Field label="Mensagem" htmlFor="message">
                 <Textarea
                   id="message"
                   name="message"
                   required
                   minLength={2}
-                  placeholder="Ex.: hora extra, fechamento, planilha que ninguém fecha…"
+                  placeholder="Vaga, processo ou o que precisa olhar."
                 />
               </Field>
             </div>
-            <p className="mt-7 text-sm leading-relaxed text-muted">
-              Primeira resposta: o que eu faria e quanto custa. Trabalho só depois disso.
-            </p>
-            <div className="mt-4 flex flex-col gap-3 sm:flex-row sm:items-center">
+            <div className="mt-8 flex flex-col gap-3 sm:flex-row sm:items-center">
               <Button type="submit" className="w-full sm:w-auto" disabled={pending}>
-                {pending ? "Enviando…" : "Pedir proposta"}
+                {pending ? "Enviando…" : "Enviar"}
               </Button>
               <Button
                 type="button"
