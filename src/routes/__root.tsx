@@ -4,7 +4,7 @@ import { PreviewHostBridge } from "@/components/preview-host-bridge";
 import { Toaster } from "sonner";
 import appCss from "../styles.css?url";
 
-const APP_NAME = "MTSCH — Automação de processos";
+const APP_NAME = "MTSCH — Dados & Automação";
 const host = import.meta.env.VITE_PUBLIC_HOSTNAME;
 const ogImage = host ? `https://${host}/og.jpg` : undefined;
 
@@ -17,7 +17,7 @@ export const Route = createRootRoute({
       {
         name: "description",
         content:
-          "Processo repetido vira sistema. Planilha, WhatsApp, relatório. Python. Porto Alegre.",
+          "MTSCH — Dados & Automação. Python em Porto Alegre.",
       },
       { name: "apple-mobile-web-app-title", content: APP_NAME },
       { name: "theme-color", content: "#000000" },
