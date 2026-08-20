@@ -1,3 +1,5 @@
+import { formatHours, TREATED, VACANCY } from "@/lib/hora-extra";
+
 export function DeviceStage() {
   return (
     <div className="relative mx-auto w-full max-w-3xl overflow-x-clip px-2">
@@ -45,22 +47,22 @@ function DashboardScreen() {
         <div className="flex min-w-0 flex-1 flex-col p-3 sm:p-4">
           <div className="mb-3 flex items-center justify-between gap-2">
             <div className="min-w-0">
-              <p className="text-micro text-muted uppercase">Validador</p>
+              <p className="text-micro text-muted uppercase">Diagnóstico · 30 dias</p>
               <p className="truncate text-xs font-medium text-fg-soft sm:text-sm">
-                Exemplo sintético — não é cliente
+                Hora extra — recorte real
               </p>
             </div>
             <span className="inline-flex shrink-0 items-center gap-1.5 rounded-full border border-line px-2 py-1 text-micro text-fg-soft">
-              código aberto
+              100% tratado
             </span>
           </div>
           <div className="mb-3 grid grid-cols-3 gap-2">
-            <Kpi label="Entra" value="CSV" />
-            <Kpi label="Checa" value="7" />
-            <Kpi label="Sai" value=".md" />
+            <Kpi label="Tratadas" value={formatHours(TREATED.hours)} />
+            <Kpi label="Efetivo" value="55,5%" />
+            <Kpi label="Sem extra" value={`${VACANCY.zeroExposure.pct.toLocaleString("pt-BR", { minimumFractionDigits: 1 })}%`} />
           </div>
           <div className="relative min-h-0 flex-1 overflow-hidden rounded-sm border border-line bg-bg p-2">
-            <AreaChart />
+            <MotiveBars />
           </div>
         </div>
       </div>
@@ -77,26 +79,26 @@ function Kpi({ label, value }: { label: string; value: string }) {
   );
 }
 
-function AreaChart() {
+function MotiveBars() {
+  const rows = [
+    { label: "Efetivo", w: 55.5 },
+    { label: "Contrato", w: 31.7 },
+    { label: "Outros", w: 12.8 },
+  ];
   return (
-    <svg viewBox="0 0 320 110" className="h-full w-full" aria-hidden>
-      <defs>
-        <linearGradient id="areaFill" x1="0" x2="0" y1="0" y2="1">
-          <stop offset="0%" stopColor="white" stopOpacity="0.22" />
-          <stop offset="100%" stopColor="white" stopOpacity="0" />
-        </linearGradient>
-      </defs>
-      <path
-        d="M0 88 C 28 84, 40 70, 58 66 C 84 60, 96 78, 122 62 C 148 46, 164 28, 190 34 C 216 40, 228 22, 252 18 C 276 14, 294 30, 320 16 L 320 110 L 0 110 Z"
-        fill="url(#areaFill)"
-      />
-      <path
-        d="M0 88 C 28 84, 40 70, 58 66 C 84 60, 96 78, 122 62 C 148 46, 164 28, 190 34 C 216 40, 228 22, 252 18 C 276 14, 294 30, 320 16"
-        fill="none"
-        stroke="rgb(224 224 224)"
-        strokeWidth="1.6"
-      />
-    </svg>
+    <div className="flex h-full flex-col justify-center gap-2 px-1">
+      {rows.map((r) => (
+        <div key={r.label} className="flex items-center gap-2">
+          <span className="w-14 shrink-0 truncate text-micro text-muted">{r.label}</span>
+          <div className="h-1.5 flex-1 rounded-full bg-bg-elevated">
+            <div className="h-full rounded-full bg-fg" style={{ width: `${r.w}%` }} />
+          </div>
+          <span className="w-10 shrink-0 text-right text-micro tabular-nums text-fg-soft">
+            {r.w.toLocaleString("pt-BR", { minimumFractionDigits: 1 })}%
+          </span>
+        </div>
+      ))}
+    </div>
   );
 }
 
@@ -106,11 +108,11 @@ function Phone() {
       <div className="overflow-hidden rounded-lg border border-line bg-bg">
         <div className="relative aspect-9/16 px-2.5 pt-4 pb-3">
           <span className="absolute top-1.5 left-1/2 h-1.5 w-10 -translate-x-1/2 rounded-full bg-device-edge" />
-          <p className="mt-3 text-micro text-muted uppercase">Achados</p>
-          <p className="mb-2 text-xs font-medium text-fg">Auditoria</p>
-          <FeedRow title="Duplicata" meta="2 registros" />
-          <FeedRow title="Nulo crítico" meta="vendedor / unitário" />
-          <FeedRow title="Conta não fecha" meta="qtd × preço" />
+          <p className="mt-3 text-micro text-muted uppercase">Tese</p>
+          <p className="mb-2 text-xs font-medium text-fg">Posto vago</p>
+          <FeedRow title="Falta de efetivo" meta="55,5% das horas" />
+          <FeedRow title="Extra contrato" meta="31,7% — faturável" />
+          <FeedRow title="Sem exposição" meta="42,7% das vagas" />
         </div>
       </div>
     </div>
