@@ -21,24 +21,23 @@ export function Hero() {
 
       <div className="relative mx-auto flex w-full max-w-5xl flex-col items-center px-5 pt-4 pb-16 text-center sm:px-6 sm:pt-8 sm:pb-20 md:flex-1 md:pb-40">
         <p className="rise-in text-micro font-medium text-muted uppercase">
-          — Soluções escaláveis em Python —
+          Python · Porto Alegre
         </p>
         <h1 className="rise-in font-display mt-4 text-display font-semibold uppercase text-fg [animation-delay:80ms]">
-          Automatize negócios.
+          Processo repetido.
           <br />
-          Cresça agora.
+          Vira sistema.
         </h1>
         <p className="rise-in mt-4 max-w-xl text-sm leading-relaxed text-fg-soft sm:mt-5 sm:text-base [animation-delay:140ms]">
-          Transformamos processos manuais e repetitivos em sistemas inteligentes que geram
-          receita 24/7.
+          Planilha, WhatsApp, relatório. Eu tiro da mão e devolvo rodando.
         </p>
         <div className="rise-in mt-6 flex w-full max-w-full flex-col items-stretch justify-center gap-3 sm:mt-7 sm:w-auto sm:flex-row sm:items-center [animation-delay:200ms]">
           <Button size="lg" onClick={() => scrollToId("contato")}>
-            Pedir consultoria gratuita
+            Falar agora
             <ArrowRight className="size-4" />
           </Button>
           <Button size="lg" variant="quiet" onClick={() => scrollToId("projetos")}>
-            Ver cases reais
+            Ver o código
           </Button>
         </div>
         <div className="mt-6 w-full max-w-sm overflow-x-clip sm:mt-8 sm:max-w-xl md:absolute md:inset-x-0 md:bottom-0 md:mt-0 md:max-w-none">

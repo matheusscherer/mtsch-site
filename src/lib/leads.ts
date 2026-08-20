@@ -8,7 +8,7 @@ import { notifyWebhook } from "@/lib/notify-webhook";
 import { notifyNotion } from "@/lib/notify-notion";
 import { notifyOps } from "@/lib/notify-ops";
 import { qualifyLead, type LeadQualification, type LeadTemperature } from "@/lib/qualify-lead";
-import { formatSlotLabel, isOfferedSlot, periodOf, proposeSlots, type MeetingSlot } from "@/lib/slots";
+import { formatSlotLabel, isOfferedSlot, periodOf, type MeetingSlot } from "@/lib/slots";
 import { meetingCalendarUrl } from "@/lib/calendar-link";
 import { isPlausibleEmail } from "@/lib/email";
 import { parseBrMobile } from "@/lib/phone";
@@ -31,8 +31,7 @@ const leadSchema = z.object({
     .refine((s) => s.length === 0 || parseBrMobile(s) !== null, "WhatsApp inválido."),
 });
 
-export type { MeetingSlot } from "@/lib/slots";
-export type { LeadTemperature } from "@/lib/qualify-lead";
+export type LeadInput = z.infer<typeof leadSchema>;
 
 export type LeadRow = {
   id: string;
@@ -174,7 +173,6 @@ export const submitLead = createServerFn({ method: "POST" })
       temperature: qualification.temperature,
       nextAction: qualification.nextAction,
       emailSent,
-      slots: proposeSlots(),
     };
   });
 

@@ -1,7 +1,7 @@
 export const brand = {
   name: "MTSCH",
-  line: "Dados & Automação",
-  lockup: "MTSCH / Dados & Automação",
+  line: "Automação de processos",
+  lockup: "MTSCH / Automação de processos",
   city: "Porto Alegre",
   email: "contatomatheusscherer@gmail.com",
   /** E.164 sem +. */
