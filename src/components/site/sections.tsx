@@ -9,6 +9,7 @@ import {
   UserX,
   Workflow,
 } from "lucide-react";
+import { examples } from "@/lib/diagnostic-examples";
 
 const services = [
   {
@@ -30,46 +31,56 @@ const services = [
 
 const diagnostics = [
   {
-    tag: "Case real",
+    tag: examples.horaExtra.label,
     title: "Hora extra",
     problem: "Volume alto de extra sem clareza de causa",
-    result: "4.110 h tratadas · 55,5% falta de efetivo · 42,7% das vagas sem exposição",
+    metric: examples.horaExtra.metrics[0].value,
+    metricLabel: examples.horaExtra.metrics[0].label,
+    result: examples.horaExtra.highlight,
     href: "/hora-extra",
     external: false,
     icon: Timer,
   },
   {
-    tag: "Diagnóstico",
+    tag: examples.estoque.label,
     title: "Estoque",
     problem: "Capital parado + ruptura de venda",
-    result: "Excesso em R$, ranking de SKUs e ruptura com demanda",
+    metric: examples.estoque.metrics[0].value,
+    metricLabel: examples.estoque.metrics[0].label,
+    result: examples.estoque.highlight,
     href: "https://github.com/matheusscherer/diagnostico-estoque",
     external: true,
     icon: Package,
   },
   {
-    tag: "Diagnóstico",
+    tag: examples.noShow.label,
     title: "No-show",
     problem: "Receita perdida + agenda ociosa",
-    result: "Taxa, impacto por horário/canal e potencial de recuperação",
+    metric: examples.noShow.metrics[0].value,
+    metricLabel: examples.noShow.metrics[0].label,
+    result: examples.noShow.highlight,
     href: "https://github.com/matheusscherer/diagnostico-no-show",
     external: true,
     icon: UserX,
   },
   {
-    tag: "Diagnóstico",
+    tag: examples.retrabalho.label,
     title: "Retrabalho",
     problem: "Custo de não-qualidade + capacidade consumida duas vezes",
-    result: "FPY, custo direto, oportunidade e causa-raiz",
+    metric: examples.retrabalho.metrics[0].value,
+    metricLabel: examples.retrabalho.metrics[0].label,
+    result: examples.retrabalho.highlight,
     href: "https://github.com/matheusscherer/diagnostico-retrabalho",
     external: true,
     icon: ClipboardList,
   },
   {
-    tag: "Diagnóstico",
+    tag: examples.rotas.label,
     title: "Combustível e rotas",
     problem: "Km extras + ociosidade de frota",
-    result: "Desvio vs referência, custo do desvio e concentração",
+    metric: examples.rotas.metrics[0].value,
+    metricLabel: examples.rotas.metrics[0].label,
+    result: examples.rotas.highlight,
     href: "https://github.com/matheusscherer/diagnostico-combustivel-rotas",
     external: true,
     icon: Fuel,
@@ -173,8 +184,8 @@ export function Cases() {
       <div className="mx-auto max-w-6xl">
         <SectionHead
           kicker="Portfólio"
-          title="Cinco diagnósticos de custo"
-          copy="Um case operacional real com dashboard interativo. Quatro diagnósticos abertos em Python, prontos para rodar com os seus dados."
+          title="Diagnósticos com números"
+          copy="Um case operacional real. Quatro exemplos gerados pelos scripts abertos — os mesmos que você pode clonar e rodar."
         />
 
         <div className="mt-12 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
@@ -187,8 +198,14 @@ export function Cases() {
                 </div>
                 <h3 className="font-display mt-5 text-xl font-semibold text-fg">{item.title}</h3>
                 <p className="mt-2 text-sm text-muted">{item.problem}</p>
-                <p className="mt-4 flex-1 text-sm leading-relaxed text-fg-soft">{item.result}</p>
-                <div className="mt-6 flex items-center gap-1 text-xs text-muted group-hover:text-fg">
+                <div className="mt-5 border-t border-line pt-4">
+                  <p className="font-display text-2xl font-semibold tabular-nums text-fg">
+                    {item.metric}
+                  </p>
+                  <p className="mt-1 text-xs text-muted">{item.metricLabel}</p>
+                </div>
+                <p className="mt-3 flex-1 text-sm leading-relaxed text-fg-soft">{item.result}</p>
+                <div className="mt-5 flex items-center gap-1 text-xs text-muted group-hover:text-fg">
                   {item.external ? "Ver código" : "Abrir dashboard"}
                   <ArrowUpRight className="size-3.5 transition-transform duration-200 group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
                 </div>
@@ -213,7 +230,7 @@ export function Cases() {
               <Link
                 key={item.title}
                 to={item.href}
-                className="group flex flex-col rounded-xl border border-line bg-bg-elevated p-6 transition-[border-color] duration-200 hover:border-line-strong sm:p-7 lg:col-span-1"
+                className="group flex flex-col rounded-xl border border-line bg-bg-elevated p-6 transition-[border-color] duration-200 hover:border-line-strong sm:p-7"
               >
                 {CardInner}
               </Link>
