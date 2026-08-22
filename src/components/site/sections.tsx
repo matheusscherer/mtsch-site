@@ -4,41 +4,41 @@ import { ArrowUpRight, Database, GitMerge, Workflow } from "lucide-react";
 const services = [
   {
     icon: Workflow,
-    title: "Automação em Python",
-    copy: "Script que lê planilha, aplica regra e devolve arquivo. Log quando precisa. Dry-run quando há envio.",
+    title: "Automação de planilhas em Python",
+    copy: "Script que lê Excel/CSV, aplica regra e devolve arquivo. Log quando precisa. Dry-run quando há envio. Tira trabalho repetido da mão.",
   },
   {
     icon: GitMerge,
     title: "Consolida o que já existe",
-    copy: "CSV, Excel e o que a operação já exporta. Notion opcional. Não é ERP nem fiscal de prateleira.",
+    copy: "CSV, Excel e o que a operação já exporta. Notion opcional. Relatório de vendas, estoque e operação sem trocar de sistema.",
   },
   {
     icon: Database,
-    title: "Qualidade de base",
-    copy: "Duplicata, nulo, conta que não fecha. Relatório do que está errado — antes de qualquer automação.",
+    title: "Qualidade e validação de base",
+    copy: "Duplicata, nulo, conta que não fecha, outliers. Relatório do que está errado — antes de qualquer automação ou decisão.",
   },
 ];
 
 const cases = [
   {
     tag: "Comercial",
-    title: "Relatório de vendas",
-    copy: "Dois CSVs no mesmo schema (exemplo com nomes Shopify e Mercado Livre) viram um resumo. Notion só com flag. Não é API dos marketplaces.",
+    title: "Relatório de vendas automatizado",
+    copy: "Dois CSVs no mesmo schema (exemplo Shopify e Mercado Livre) viram um resumo com receita, ticket e volume. Notion só com flag.",
     metric: "CSV → CSV",
     metricLabel: "exemplo sintético, código aberto",
     href: "https://github.com/matheusscherer/sales-report-automation",
   },
   {
     tag: "Base",
-    title: "Base vira lista de ação",
-    copy: "Filtra quem parou, limpa telefone, gera lista. Exemplo em clínica com dado fictício. Envio desligado por padrão.",
+    title: "Base parada vira lista de ação",
+    copy: "Filtra quem parou, limpa telefone, gera lista revisável. Exemplo em clínica com dado fictício. Envio desligado por padrão.",
     metric: "dry-run",
     metricLabel: "nada dispara sem confirmação",
     href: "https://github.com/matheusscherer/mvp_clinicas",
   },
   {
     tag: "Auditoria",
-    title: "Auditoria de bases",
+    title: "Auditoria e limpeza de bases",
     copy: "Duplicatas, nulos, outliers, datas inválidas e qtd × unitário ≠ total. Relatório em Markdown e SQLite. Base sintético.",
     metric: "7 checks",
     metricLabel: "exemplo gerado pelo próprio código",
@@ -81,7 +81,7 @@ export function Services() {
         <SectionHead
           kicker="Serviços"
           title="Tiro o repetido. Devolvo rodando."
-          copy="Três frentes. Se não sai trabalho da mão, não entra."
+          copy="Automação de planilhas, diagnóstico de custo operacional e qualidade de base. Se não sai trabalho da mão, não entra."
         />
         <div className="mt-12 grid gap-3 md:grid-cols-3">
           {services.map((item) => (
@@ -126,7 +126,7 @@ export function Cases() {
         <SectionHead
           kicker="Projetos"
           title="Um case real. Três exemplos abertos."
-          copy="O primeiro é recorte operacional de 30 dias — números reais, contas por setor. Os outros três são sintéticos."
+          copy="O primeiro é recorte operacional de 30 dias — números reais de hora extra. Os outros três são sintéticos e código aberto."
         />
 
         <Link
@@ -135,14 +135,14 @@ export function Cases() {
         >
           <div className="max-w-xl">
             <div className="flex items-center justify-between gap-3">
-              <span className="text-micro text-muted uppercase">Operação · 30 dias</span>
+              <span className="text-micro text-muted uppercase">Diagnóstico de custo · 30 dias</span>
               <ArrowUpRight className="size-4 text-muted transition-transform duration-200 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 lg:hidden" />
             </div>
             <h3 className="font-display mt-5 text-2xl font-semibold tracking-tight text-fg sm:text-3xl">
               O extra não é abuso. É posto vago.
             </h3>
             <p className="mt-4 text-sm leading-relaxed text-muted sm:text-base">
-              4.110 h tratadas à mão, 100% categorizadas. 55,5% falta de efetivo.
+              4.110 h de hora extra tratadas à mão, 100% categorizadas. 55,5% falta de efetivo.
               Contas por setor, sem nome. Relatório no site + Pandas no GitHub.
             </p>
             <p className="mt-4 text-xs tracking-wide text-muted">
