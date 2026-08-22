@@ -1,11 +1,9 @@
 import { Link, createFileRoute } from "@tanstack/react-router";
 import { ArrowLeft, ArrowUpRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { ClientsChart, MotivesChart, NatureChart } from "@/components/site/dashboard-charts";
 import { brand } from "@/lib/site";
 import {
-  CLIENTS,
-  MOTIVES,
-  NATURE,
   PERIOD,
   TOTAL,
   TREATED,
@@ -19,30 +17,16 @@ export const Route = createFileRoute("/hora-extra")({
     meta: [
       {
         title:
-          "Diagnóstico de Hora Extra com Python | Case 4.110h — 55,5% falta de efetivo | MTSCH",
+          "Dashboard · Diagnóstico de Hora Extra | 4.110h · 55,5% falta de efetivo | MTSCH",
       },
       {
         name: "description",
         content:
-          "Case real de 30 dias: 4.110 horas de hora extra analisadas com Python. 55,5% era falta de efetivo (custo puro), 42,7% das vagas fechadas sem exposição a extra. Código aberto.",
-      },
-      {
-        name: "keywords",
-        content:
-          "análise de hora extra, diagnóstico de custo operacional, Python hora extra, falta de efetivo, automação de planilhas",
-      },
-      { property: "og:title", content: "O extra não é abuso. É posto vago. — Case MTSCH" },
-      {
-        property: "og:description",
-        content:
-          "4.110 h tratadas. 55,5% falta de efetivo. 42,7% das vagas sem exposição a extra. Diagnóstico com Python.",
+          "Dashboard interativo de case real: 4.110 horas de hora extra analisadas com Python. 55,5% falta de efetivo, 42,7% das vagas fechadas sem exposição a extra.",
       },
     ],
   }),
 });
-
-const maxHours = Math.max(...MOTIVES.map((m) => m.hours));
-const maxClient = Math.max(...CLIENTS.map((c) => c.hours));
 
 function HoraExtraPage() {
   return (
@@ -67,121 +51,90 @@ function HoraExtraPage() {
         </div>
       </header>
 
-      <main className="mx-auto max-w-6xl px-5 py-10 sm:px-6 sm:py-16">
+      <main className="mx-auto max-w-6xl px-5 py-10 sm:px-6 sm:py-14">
         <Link
           to="/"
           hash="projetos"
           className="inline-flex items-center gap-2 text-sm text-muted hover:text-fg"
         >
           <ArrowLeft className="size-4" />
-          Projetos
+          Portfólio
         </Link>
 
-        <p className="text-micro mt-8 text-muted uppercase">Operação de segurança · 30 dias</p>
-        <h1 className="font-display mt-4 max-w-3xl text-display font-semibold uppercase text-fg">
-          O extra não é abuso.
-          <br />
-          É posto vago.
-        </h1>
-        <p className="mt-5 max-w-xl text-sm leading-relaxed text-fg-soft sm:text-base">
-          256 lançamentos tratados à mão. 100% categorizados. A ação não foi cortar extra —
-          foi fechar o posto mais rápido. Números reais. Contas por setor, sem nome.
-          Diagnóstico de custo operacional com Python e Pandas.
-        </p>
-
-        <div className="mt-10 grid grid-cols-2 gap-3 lg:grid-cols-4">
-          <Kpi label="Horas extras" value={formatHours(TOTAL.hours)} hint={`${TOTAL.employees} colaboradores`} />
-          <Kpi label="Tratadas à mão" value={formatHours(TREATED.hours)} hint={`${TREATED.launches} lançamentos`} />
-          <Kpi label="Causa nº 1" value="55,5%" hint="Falta de efetivo" />
-          <Kpi label="Vagas sem exposição" value="42,7%" hint={`${VACANCY.zeroExposure.count} de ${VACANCY.closed} fechadas`} />
+        <div className="mt-8 max-w-3xl">
+          <p className="text-micro text-muted uppercase">Operação de segurança · 30 dias · dados reais</p>
+          <h1 className="font-display mt-4 text-display font-semibold text-fg">
+            Diagnóstico de hora extra
+          </h1>
+          <p className="mt-5 text-sm leading-relaxed text-fg-soft sm:text-base">
+            256 lançamentos tratados manualmente e 100% categorizados. A conclusão não foi
+            “cortar extra” — foi fechar o posto vago mais rápido. Números reais, contas por setor
+            anonimizadas.
+          </p>
         </div>
 
-        <section className="mt-14 grid gap-3 lg:grid-cols-5">
-          <div className="rounded-xl border border-line bg-bg-elevated p-6 sm:p-8 lg:col-span-3">
-            <p className="text-micro text-muted uppercase">Motivo da extra</p>
-            <h2 className="font-display mt-3 text-xl font-semibold text-fg">Onde foi a hora</h2>
-            <div className="mt-6 flex h-3 overflow-hidden rounded-full bg-bg">
-              {NATURE.map((n) => (
-                <span
-                  key={n.label}
-                  className="h-full bg-fg first:opacity-100 even:opacity-55 last:opacity-25 nth-[3]:opacity-40"
-                  style={{ width: `${n.pct}%` }}
-                />
-              ))}
+        <div className="mt-10 grid grid-cols-2 gap-3 lg:grid-cols-4">
+          <Kpi label="Total no ciclo" value={formatHours(TOTAL.hours)} hint={`${TOTAL.employees} colaboradores`} />
+          <Kpi label="Tratadas à mão" value={formatHours(TREATED.hours)} hint={`${TREATED.launches} lançamentos`} />
+          <Kpi label="Causa nº 1" value="55,5%" hint="Falta de efetivo" />
+          <Kpi label="Vagas sem extra" value="42,7%" hint={`${VACANCY.zeroExposure.count} de ${VACANCY.closed} fechadas`} />
+        </div>
+
+        <section className="mt-6 grid gap-3 lg:grid-cols-5">
+          <div className="rounded-xl border border-line bg-bg-elevated p-5 sm:p-6 lg:col-span-3">
+            <div className="mb-4 flex items-end justify-between gap-3">
+              <div>
+                <p className="text-micro text-muted uppercase">Motivo da extra</p>
+                <h2 className="font-display mt-2 text-lg font-semibold text-fg">Horas por causa</h2>
+              </div>
+              <p className="text-xs text-muted">Passe o mouse para detalhar</p>
             </div>
-            <ul className="mt-3 flex flex-wrap gap-x-4 gap-y-1 text-xs text-muted">
-              {NATURE.map((n) => (
-                <li key={n.label}>
-                  {n.label} {n.pct.toLocaleString("pt-BR", { minimumFractionDigits: 1 })}%
-                </li>
-              ))}
-            </ul>
-            <div className="mt-8 space-y-3">
-              {MOTIVES.map((m) => (
-                <div key={m.label}>
-                  <div className="flex items-baseline justify-between gap-3 text-sm">
-                    <span className="text-fg-soft">{m.label}</span>
-                    <span className="tabular-nums text-muted">
-                      {formatHours(m.hours)} h · {m.pct.toLocaleString("pt-BR", { minimumFractionDigits: 1 })}%
-                    </span>
-                  </div>
-                  <div className="mt-1.5 h-1.5 rounded-full bg-bg">
-                    <div
-                      className="h-full rounded-full bg-fg"
-                      style={{ width: `${(m.hours / maxHours) * 100}%` }}
-                    />
-                  </div>
-                </div>
-              ))}
-            </div>
+            <MotivesChart />
           </div>
 
-          <div className="rounded-xl border border-line bg-bg-elevated p-6 sm:p-8 lg:col-span-2">
-            <p className="text-micro text-muted uppercase">Vacância</p>
-            <p className="font-display mt-4 text-5xl font-semibold tabular-nums tracking-tight text-fg">
-              42,7%
-            </p>
-            <p className="mt-3 text-sm leading-relaxed text-muted">
-              das {VACANCY.closed} vagas fechadas saíram de exposição a extra no mesmo dia.
-              {VACANCY.open} ainda abertas.
-            </p>
-            <p className="mt-6 text-sm leading-relaxed text-fg-soft">
-              58% da hora tratada é estrutural. Não se corta — se fecha o posto.
+          <div className="rounded-xl border border-line bg-bg-elevated p-5 sm:p-6 lg:col-span-2">
+            <p className="text-micro text-muted uppercase">Natureza</p>
+            <h2 className="font-display mt-2 text-lg font-semibold text-fg">Estrutura do custo</h2>
+            <div className="mt-4">
+              <NatureChart />
+            </div>
+            <p className="mt-4 text-sm leading-relaxed text-muted">
+              58% é estrutural. Não se resolve com “cortar hora” — se resolve fechando o posto.
             </p>
           </div>
         </section>
 
-        <section className="mt-3 rounded-xl border border-line bg-bg-elevated p-6 sm:p-8">
-          <p className="text-micro text-muted uppercase">Contas por setor</p>
-          <h2 className="font-display mt-3 text-xl font-semibold text-fg">Onde concentrou</h2>
-          <div className="mt-8 space-y-3">
-            {CLIENTS.map((c) => (
-              <div key={c.name}>
-                <div className="flex items-baseline justify-between gap-3 text-sm">
-                  <span className="text-fg-soft">{c.name}</span>
-                  <span className="tabular-nums text-muted">{formatHours(c.hours)} h</span>
-                </div>
-                <div className="mt-1.5 h-1.5 rounded-full bg-bg">
-                  <div
-                    className="h-full rounded-full bg-fg"
-                    style={{ width: `${(c.hours / maxClient) * 100}%` }}
-                  />
-                </div>
-              </div>
-            ))}
+        <section className="mt-3 rounded-xl border border-line bg-bg-elevated p-5 sm:p-6">
+          <div className="mb-4 flex flex-wrap items-end justify-between gap-3">
+            <div>
+              <p className="text-micro text-muted uppercase">Concentração</p>
+              <h2 className="font-display mt-2 text-lg font-semibold text-fg">Horas por setor</h2>
+            </div>
+            <p className="text-xs text-muted">Contas anonimizadas</p>
           </div>
-          <p className="mt-6 text-xs leading-relaxed text-muted">
-            Recorte sujeito a aprovação manual. Nomes de cliente omitidos. O total de{" "}
-            {formatHours(TOTAL.hours)} h inclui lançamentos automáticos de escala; a análise de motivo
-            vale para as {formatHours(TREATED.hours)} h tratadas à mão.
-          </p>
+          <ClientsChart />
+        </section>
+
+        <section className="mt-3 grid gap-3 sm:grid-cols-3">
+          <Insight
+            title="Tese"
+            body="A maior parte da extra estrutural seguia padrão repetitivo de vacância. Prioridade: tempo de cobertura de vaga, não volume de extra."
+          />
+          <Insight
+            title="Ação"
+            body={`${VACANCY.zeroExposure.pct.toLocaleString("pt-BR", { minimumFractionDigits: 1 })}% das vagas fechadas saíram de exposição a extra no mesmo dia. ${VACANCY.open} ainda abertas no recorte."`}
+          />
+          <Insight
+            title="Método"
+            body="Pandas + categorização manual auditável. Relatório legível para gestão. Código do pipeline no GitHub."
+          />
         </section>
 
         <section className="mt-14 flex flex-col gap-4 border-t border-line pt-10 sm:flex-row sm:items-center sm:justify-between">
           <div>
-            <p className="font-display text-xl font-semibold text-fg">O recorte e o código estão abertos.</p>
+            <p className="font-display text-xl font-semibold text-fg">Código e lógica abertos</p>
             <p className="mt-2 max-w-md text-sm text-muted">
-              Recrutamento ou operação: é só chamar.
+              Quer o mesmo tipo de recorte na sua operação? É só chamar.
             </p>
           </div>
           <div className="flex flex-col gap-3 sm:flex-row">
@@ -196,7 +149,7 @@ function HoraExtraPage() {
                 target="_blank"
                 rel="noreferrer"
               >
-                Código
+                GitHub
                 <ArrowUpRight className="size-4" />
               </a>
             </Button>
@@ -215,6 +168,15 @@ function Kpi({ label, value, hint }: { label: string; value: string; hint: strin
         {value}
       </p>
       <p className="mt-1 text-xs text-muted">{hint}</p>
+    </div>
+  );
+}
+
+function Insight({ title, body }: { title: string; body: string }) {
+  return (
+    <div className="rounded-xl border border-line bg-bg-elevated p-5">
+      <p className="text-micro text-muted uppercase">{title}</p>
+      <p className="mt-3 text-sm leading-relaxed text-fg-soft">{body}</p>
     </div>
   );
 }

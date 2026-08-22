@@ -1,65 +1,113 @@
 import { Link } from "@tanstack/react-router";
-import { ArrowUpRight, Database, GitMerge, Workflow } from "lucide-react";
+import {
+  ArrowUpRight,
+  ClipboardList,
+  Database,
+  Fuel,
+  Package,
+  Timer,
+  UserX,
+  Workflow,
+} from "lucide-react";
 
 const services = [
   {
     icon: Workflow,
-    title: "Automação de planilhas em Python",
-    copy: "Script que lê Excel/CSV, aplica regra e devolve arquivo. Log quando precisa. Dry-run quando há envio. Tira trabalho repetido da mão.",
+    title: "Automação de planilhas",
+    copy: "Scripts em Python que leem Excel/CSV, aplicam regras de negócio e devolvem arquivo revisável. Dry-run por padrão quando há envio.",
   },
   {
-    icon: GitMerge,
-    title: "Consolida o que já existe",
-    copy: "CSV, Excel e o que a operação já exporta. Notion opcional. Relatório de vendas, estoque e operação sem trocar de sistema.",
+    icon: Timer,
+    title: "Diagnóstico de custo operacional",
+    copy: "Hora extra, estoque, no-show, retrabalho e rotas. Cada diagnóstico mostra dinheiro parado, perdido ou consumido duas vezes.",
   },
   {
     icon: Database,
-    title: "Qualidade e validação de base",
-    copy: "Duplicata, nulo, conta que não fecha, outliers. Relatório do que está errado — antes de qualquer automação ou decisão.",
+    title: "Qualidade de base",
+    copy: "Duplicatas, nulos, contas que não fecham, outliers e inconsistências. Relatório do erro antes de qualquer automação.",
   },
 ];
 
-const cases = [
+const diagnostics = [
   {
-    tag: "Comercial",
-    title: "Relatório de vendas automatizado",
-    copy: "Dois CSVs no mesmo schema (exemplo Shopify e Mercado Livre) viram um resumo com receita, ticket e volume. Notion só com flag.",
-    metric: "CSV → CSV",
-    metricLabel: "exemplo sintético, código aberto",
+    tag: "Case real",
+    title: "Hora extra",
+    problem: "Volume alto de extra sem clareza de causa",
+    result: "4.110 h tratadas · 55,5% falta de efetivo · 42,7% das vagas sem exposição",
+    href: "/hora-extra",
+    external: false,
+    icon: Timer,
+  },
+  {
+    tag: "Diagnóstico",
+    title: "Estoque",
+    problem: "Capital parado + ruptura de venda",
+    result: "Excesso em R$, ranking de SKUs e ruptura com demanda",
+    href: "https://github.com/matheusscherer/diagnostico-estoque",
+    external: true,
+    icon: Package,
+  },
+  {
+    tag: "Diagnóstico",
+    title: "No-show",
+    problem: "Receita perdida + agenda ociosa",
+    result: "Taxa, impacto por horário/canal e potencial de recuperação",
+    href: "https://github.com/matheusscherer/diagnostico-no-show",
+    external: true,
+    icon: UserX,
+  },
+  {
+    tag: "Diagnóstico",
+    title: "Retrabalho",
+    problem: "Custo de não-qualidade + capacidade consumida duas vezes",
+    result: "FPY, custo direto, oportunidade e causa-raiz",
+    href: "https://github.com/matheusscherer/diagnostico-retrabalho",
+    external: true,
+    icon: ClipboardList,
+  },
+  {
+    tag: "Diagnóstico",
+    title: "Combustível e rotas",
+    problem: "Km extras + ociosidade de frota",
+    result: "Desvio vs referência, custo do desvio e concentração",
+    href: "https://github.com/matheusscherer/diagnostico-combustivel-rotas",
+    external: true,
+    icon: Fuel,
+  },
+];
+
+const tools = [
+  {
+    title: "Validador de bases",
+    copy: "7 checks: duplicata, nulo, outlier, data inválida, conta que não fecha.",
+    href: "https://github.com/matheusscherer/validador_dados",
+  },
+  {
+    title: "Relatório de vendas",
+    copy: "Dois CSVs no mesmo schema viram resumo de receita, ticket e volume.",
     href: "https://github.com/matheusscherer/sales-report-automation",
   },
   {
-    tag: "Base",
-    title: "Base parada vira lista de ação",
-    copy: "Filtra quem parou, limpa telefone, gera lista revisável. Exemplo em clínica com dado fictício. Envio desligado por padrão.",
-    metric: "dry-run",
-    metricLabel: "nada dispara sem confirmação",
+    title: "Base → lista de ação",
+    copy: "Filtra quem parou, limpa telefone, gera lista. Dry-run por padrão.",
     href: "https://github.com/matheusscherer/mvp_clinicas",
-  },
-  {
-    tag: "Auditoria",
-    title: "Auditoria e limpeza de bases",
-    copy: "Duplicatas, nulos, outliers, datas inválidas e qtd × unitário ≠ total. Relatório em Markdown e SQLite. Base sintético.",
-    metric: "7 checks",
-    metricLabel: "exemplo gerado pelo próprio código",
-    href: "https://github.com/matheusscherer/validador_dados",
   },
 ];
 
 const steps = [
-  { n: "01", title: "Diagnóstico", copy: "Olho o processo real — não o organograma." },
-  { n: "02", title: "Recorte", copy: "O menor script que tira trabalho da mão." },
-  { n: "03", title: "Implementação", copy: "Python, arquivo, relatório. Sem teatro." },
-  { n: "04", title: "Revisão", copy: "Você vê o resultado antes de qualquer envio." },
+  { n: "01", title: "Diagnóstico", copy: "Mapeio o processo real e a planilha que a operação já usa." },
+  { n: "02", title: "Recorte", copy: "Defino o menor entregável que gera decisão clara." },
+  { n: "03", title: "Implementação", copy: "Python + Pandas. Script legível, relatório e testes." },
+  { n: "04", title: "Revisão", copy: "Você valida o resultado antes de qualquer ação automática." },
 ];
 
 export function ProofBar() {
   return (
     <section className="border-y border-line bg-bg">
       <div className="mx-auto grid max-w-6xl grid-cols-1 divide-y divide-line sm:grid-cols-3 sm:divide-x sm:divide-y-0">
-        <Stat k="Python" v="automação que tu consegue abrir e entender" />
-        <Stat k="Integração" v="usa o que a operação já tem" />
-        <Stat k="Revisão" v="nada dispara sem o dono ver" />
+        <Stat k="Código aberto" v="Scripts legíveis, com testes e dry-run" />
+        <Stat k="Foco em dinheiro" v="Não entrego gráfico. Entrego custo e prioridade" />
+        <Stat k="Operação real" v="Case com 4.110 h de hora extra categorizadas" />
       </div>
     </section>
   );
@@ -68,7 +116,7 @@ export function ProofBar() {
 function Stat({ k, v }: { k: string; v: string }) {
   return (
     <div className="px-6 py-8 sm:px-10">
-      <p className="font-display text-2xl font-semibold tracking-tight text-fg">{k}</p>
+      <p className="font-display text-xl font-semibold tracking-tight text-fg sm:text-2xl">{k}</p>
       <p className="mt-2 max-w-xs text-sm text-muted">{v}</p>
     </div>
   );
@@ -80,8 +128,8 @@ export function Services() {
       <div className="mx-auto max-w-6xl">
         <SectionHead
           kicker="Serviços"
-          title="Tiro o repetido. Devolvo rodando."
-          copy="Automação de planilhas, diagnóstico de custo operacional e qualidade de base. Se não sai trabalho da mão, não entra."
+          title="O que eu entrego"
+          copy="Três frentes. Cada uma termina em relatório acionável ou script que a operação consegue manter."
         />
         <div className="mt-12 grid gap-3 md:grid-cols-3">
           {services.map((item) => (
@@ -104,7 +152,7 @@ export function Method() {
   return (
     <section className="border-y border-line bg-bg-elevated px-5 py-16 sm:px-6 sm:py-20">
       <div className="mx-auto max-w-6xl">
-        <SectionHead kicker="Método" title="Rápido. Claro. Sem teatro." />
+        <SectionHead kicker="Método" title="Do dado bruto à decisão" />
         <div className="mt-12 grid gap-8 sm:grid-cols-2 lg:grid-cols-4">
           {steps.map((step) => (
             <div key={step.n}>
@@ -124,64 +172,71 @@ export function Cases() {
     <section id="projetos" className="scroll-mt-24 bg-bg px-5 py-20 sm:px-6 sm:py-24">
       <div className="mx-auto max-w-6xl">
         <SectionHead
-          kicker="Projetos"
-          title="Um case real. Três exemplos abertos."
-          copy="O primeiro é recorte operacional de 30 dias — números reais de hora extra. Os outros três são sintéticos e código aberto."
+          kicker="Portfólio"
+          title="Cinco diagnósticos de custo"
+          copy="Um case operacional real com dashboard interativo. Quatro diagnósticos abertos em Python, prontos para rodar com os seus dados."
         />
 
-        <Link
-          to="/hora-extra"
-          className="group mt-12 flex flex-col rounded-xl border border-line bg-bg-elevated p-6 transition-[border-color] duration-200 hover:border-line-strong sm:p-8 lg:flex-row lg:items-end lg:justify-between lg:gap-10"
-        >
-          <div className="max-w-xl">
-            <div className="flex items-center justify-between gap-3">
-              <span className="text-micro text-muted uppercase">Diagnóstico de custo · 30 dias</span>
-              <ArrowUpRight className="size-4 text-muted transition-transform duration-200 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 lg:hidden" />
-            </div>
-            <h3 className="font-display mt-5 text-2xl font-semibold tracking-tight text-fg sm:text-3xl">
-              O extra não é abuso. É posto vago.
-            </h3>
-            <p className="mt-4 text-sm leading-relaxed text-muted sm:text-base">
-              4.110 h de hora extra tratadas à mão, 100% categorizadas. 55,5% falta de efetivo.
-              Contas por setor, sem nome. Relatório no site + Pandas no GitHub.
-            </p>
-            <p className="mt-4 text-xs tracking-wide text-muted">
-              github.com/matheusscherer/diagnostico-custo-hora-extra
-            </p>
-          </div>
-          <div className="mt-8 border-t border-line pt-5 lg:mt-0 lg:border-t-0 lg:pt-0 lg:text-right">
-            <p className="font-display text-4xl font-semibold tabular-nums tracking-tight text-fg">
-              42,7%
-            </p>
-            <p className="mt-2 max-w-[14rem] text-xs tracking-wide text-muted lg:ml-auto">
-              das vagas fechadas sem um dia de exposição a extra
-            </p>
-          </div>
-        </Link>
+        <div className="mt-12 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
+          {diagnostics.map((item) => {
+            const CardInner = (
+              <>
+                <div className="flex items-center justify-between gap-3">
+                  <span className="text-micro text-muted uppercase">{item.tag}</span>
+                  <item.icon className="size-4 text-muted" strokeWidth={1.5} />
+                </div>
+                <h3 className="font-display mt-5 text-xl font-semibold text-fg">{item.title}</h3>
+                <p className="mt-2 text-sm text-muted">{item.problem}</p>
+                <p className="mt-4 flex-1 text-sm leading-relaxed text-fg-soft">{item.result}</p>
+                <div className="mt-6 flex items-center gap-1 text-xs text-muted group-hover:text-fg">
+                  {item.external ? "Ver código" : "Abrir dashboard"}
+                  <ArrowUpRight className="size-3.5 transition-transform duration-200 group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
+                </div>
+              </>
+            );
 
-        <div className="mt-3 grid gap-3 lg:grid-cols-3">
-          {cases.map((item) => (
-            <a
-              key={item.title}
-              href={item.href}
-              target="_blank"
-              rel="noreferrer"
-              className="group flex flex-col rounded-xl border border-line bg-bg-elevated p-6 transition-[border-color] duration-200 hover:border-line-strong sm:p-7"
-            >
-              <div className="flex items-center justify-between">
-                <span className="text-micro text-muted uppercase">{item.tag}</span>
-                <ArrowUpRight className="size-4 text-muted transition-transform duration-200 group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
-              </div>
-              <h3 className="font-display mt-6 text-xl font-semibold text-fg">{item.title}</h3>
-              <p className="mt-3 flex-1 text-sm leading-relaxed text-muted">{item.copy}</p>
-              <div className="mt-8 border-t border-line pt-5">
-                <p className="font-display text-2xl font-semibold tabular-nums text-fg">
-                  {item.metric}
-                </p>
-                <p className="mt-1 text-xs tracking-wide text-muted">{item.metricLabel}</p>
-              </div>
-            </a>
-          ))}
+            if (item.external) {
+              return (
+                <a
+                  key={item.title}
+                  href={item.href}
+                  target="_blank"
+                  rel="noreferrer"
+                  className="group flex flex-col rounded-xl border border-line bg-bg-elevated p-6 transition-[border-color] duration-200 hover:border-line-strong sm:p-7"
+                >
+                  {CardInner}
+                </a>
+              );
+            }
+
+            return (
+              <Link
+                key={item.title}
+                to={item.href}
+                className="group flex flex-col rounded-xl border border-line bg-bg-elevated p-6 transition-[border-color] duration-200 hover:border-line-strong sm:p-7 lg:col-span-1"
+              >
+                {CardInner}
+              </Link>
+            );
+          })}
+        </div>
+
+        <div className="mt-10">
+          <p className="text-micro text-muted uppercase">Ferramentas de apoio</p>
+          <div className="mt-4 grid gap-3 sm:grid-cols-3">
+            {tools.map((t) => (
+              <a
+                key={t.title}
+                href={t.href}
+                target="_blank"
+                rel="noreferrer"
+                className="group rounded-xl border border-line bg-bg p-5 transition-[border-color] hover:border-line-strong"
+              >
+                <p className="font-medium text-fg">{t.title}</p>
+                <p className="mt-2 text-sm text-muted">{t.copy}</p>
+              </a>
+            ))}
+          </div>
         </div>
       </div>
     </section>
