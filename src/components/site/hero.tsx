@@ -13,7 +13,7 @@ export function Hero() {
       <div className="pointer-events-none absolute inset-0 -z-10 overflow-hidden">
         <img
           src="/hero-smoke.jpg"
-          alt=""
+          alt="Fundo abstrato — automação de planilhas e diagnóstico de custo operacional com Python"
           className="h-full w-full object-cover object-center opacity-90"
         />
         <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_50%_38%,rgb(255_255_255/0.12),transparent_55%)]" />
@@ -22,7 +22,7 @@ export function Hero() {
 
       <div className="relative mx-auto flex w-full max-w-5xl flex-col items-center px-5 pt-4 pb-16 text-center sm:px-6 sm:pt-8 sm:pb-20 md:flex-1 md:pb-40">
         <p className="rise-in text-micro font-medium text-muted uppercase">
-          Python · Dados · Porto Alegre
+          Python · Automação de planilhas · Porto Alegre
         </p>
         <h1 className="rise-in font-display mt-4 text-display font-semibold uppercase text-fg [animation-delay:80ms]">
           Planilha suja.
@@ -30,7 +30,8 @@ export function Hero() {
           Relatório na mão.
         </h1>
         <p className="rise-in mt-4 max-w-xl text-sm leading-relaxed text-fg-soft sm:mt-5 sm:text-base [animation-delay:140ms]">
-          Diagnóstico de custo operacional e automação de relatório com Python.
+          Diagnóstico de custo operacional e automação de relatórios com Python e Pandas.
+          Hora extra, estoque, no-show e bases que não fecham.
         </p>
         <div className="rise-in mt-6 flex w-full max-w-full flex-col items-stretch justify-center gap-3 sm:mt-7 sm:w-auto sm:flex-row sm:items-center [animation-delay:200ms]">
           <Button asChild size="lg">

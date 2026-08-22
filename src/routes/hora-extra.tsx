@@ -17,11 +17,25 @@ export const Route = createFileRoute("/hora-extra")({
   component: HoraExtraPage,
   head: () => ({
     meta: [
-      { title: "O extra não é abuso. É posto vago. — MTSCH" },
+      {
+        title:
+          "Diagnóstico de Hora Extra com Python | Case 4.110h — 55,5% falta de efetivo | MTSCH",
+      },
       {
         name: "description",
         content:
-          "Case de 30 dias: 4.110 h tratadas à mão, 55,5% falta de efetivo, 42,7% das vagas fechadas sem exposição a extra.",
+          "Case real de 30 dias: 4.110 horas de hora extra analisadas com Python. 55,5% era falta de efetivo (custo puro), 42,7% das vagas fechadas sem exposição a extra. Código aberto.",
+      },
+      {
+        name: "keywords",
+        content:
+          "análise de hora extra, diagnóstico de custo operacional, Python hora extra, falta de efetivo, automação de planilhas",
+      },
+      { property: "og:title", content: "O extra não é abuso. É posto vago. — Case MTSCH" },
+      {
+        property: "og:description",
+        content:
+          "4.110 h tratadas. 55,5% falta de efetivo. 42,7% das vagas sem exposição a extra. Diagnóstico com Python.",
       },
     ],
   }),
@@ -72,6 +86,7 @@ function HoraExtraPage() {
         <p className="mt-5 max-w-xl text-sm leading-relaxed text-fg-soft sm:text-base">
           256 lançamentos tratados à mão. 100% categorizados. A ação não foi cortar extra —
           foi fechar o posto mais rápido. Números reais. Contas por setor, sem nome.
+          Diagnóstico de custo operacional com Python e Pandas.
         </p>
 
         <div className="mt-10 grid grid-cols-2 gap-3 lg:grid-cols-4">
