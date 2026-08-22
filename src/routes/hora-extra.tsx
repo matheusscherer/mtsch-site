@@ -29,6 +29,10 @@ export const Route = createFileRoute("/hora-extra")({
 });
 
 function HoraExtraPage() {
+  const vacancyInsight = `${VACANCY.zeroExposure.pct.toLocaleString("pt-BR", {
+    minimumFractionDigits: 1,
+  })}% das vagas fechadas saíram de exposição a extra no mesmo dia. ${VACANCY.open} ainda abertas no recorte.`;
+
   return (
     <div className="min-h-svh bg-bg text-fg">
       <header className="sticky top-0 z-40 border-b border-line bg-bg/90 backdrop-blur-xl">
@@ -120,10 +124,7 @@ function HoraExtraPage() {
             title="Tese"
             body="A maior parte da extra estrutural seguia padrão repetitivo de vacância. Prioridade: tempo de cobertura de vaga, não volume de extra."
           />
-          <Insight
-            title="Ação"
-            body={`${VACANCY.zeroExposure.pct.toLocaleString("pt-BR", { minimumFractionDigits: 1 })}% das vagas fechadas saíram de exposição a extra no mesmo dia. ${VACANCY.open} ainda abertas no recorte."`}
-          />
+          <Insight title="Ação" body={vacancyInsight} />
           <Insight
             title="Método"
             body="Pandas + categorização manual auditável. Relatório legível para gestão. Código do pipeline no GitHub."
