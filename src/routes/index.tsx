@@ -2,6 +2,7 @@ import { createFileRoute } from "@tanstack/react-router";
 import { Header } from "@/components/site/header";
 import { Hero } from "@/components/site/hero";
 import { Cases, Method, ProofBar, Services } from "@/components/site/sections";
+import { Diagnose } from "@/components/site/diagnose";
 import { Contact } from "@/components/site/contact";
 import { Footer } from "@/components/site/footer";
 
@@ -15,6 +16,7 @@ function Home() {
         <Hero />
         <ProofBar />
         <Services />
+        <Diagnose />
         <Method />
         <Cases />
         <Contact />
