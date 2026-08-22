@@ -9,8 +9,7 @@ export const brand = {
 };
 
 export const navItems = [
-  { href: "#projetos", id: "projetos", label: "Projetos" },
-  { href: "#servicos", id: "servicos", label: "Serviços" },
+  { href: "#diagnostico", id: "diagnostico", label: "Diagnósticos" },
   { href: "#contato", id: "contato", label: "Contato" },
 ] as const;
 

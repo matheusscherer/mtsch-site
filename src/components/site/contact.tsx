@@ -33,7 +33,7 @@ function readPayload(form: HTMLFormElement): Payload {
 
 function validate(payload: Payload): string | null {
   if (payload.name.length < 2) return "Coloca teu nome.";
-  if (!isPlausibleEmail(payload.email)) return "E-mail inválido — usa um endereço real.";
+  if (!isPlausibleEmail(payload.email)) return "E-mail inválido.";
   if (payload.phone && !parseBrMobile(payload.phone)) return "WhatsApp inválido — DDD + 9 dígitos.";
   if (payload.message.length < 2) return "Uma frase já serve.";
   return null;
@@ -67,16 +67,8 @@ export function Contact() {
       form.reset();
       setResult({ wa });
       toast.success("Recebi. Te retorno em breve.");
-    } catch (err) {
-      const raw = err instanceof Error ? err.message : "";
-      const friendly = raw.includes("WhatsApp")
-        ? "WhatsApp inválido — DDD + 9 dígitos."
-        : raw.includes("E-mail")
-          ? "E-mail inválido — usa um endereço real."
-          : raw.includes("Nome")
-            ? "Coloca teu nome."
-            : "Não foi possível enviar. Tente de novo em instantes.";
-      toast.error(friendly);
+    } catch {
+      toast.error("Não foi possível enviar. Tente de novo.");
     } finally {
       setPending(false);
     }
@@ -88,111 +80,64 @@ export function Contact() {
   }
 
   return (
-    <section id="contato" className="scroll-mt-24 border-t border-line bg-bg px-5 py-20 sm:px-6 sm:py-24">
-      <div className="mx-auto grid max-w-6xl gap-12 lg:grid-cols-[1fr_1.1fr] lg:gap-20">
-        <div>
-          <p className="text-micro text-muted uppercase">Contato</p>
-          <h2 className="font-display mt-3 text-title font-semibold text-fg">
-            Recrutamento, projeto ou operação.
+    <section id="contato" className="scroll-mt-24 border-t border-line px-5 py-14 sm:px-6 sm:py-16">
+      <div className="mx-auto max-w-3xl">
+        <div className="text-center">
+          <p className="text-xs tracking-wide text-muted">Contato</p>
+          <h2 className="font-display mt-2 text-2xl font-semibold tracking-tight text-fg sm:text-3xl">
+            Vaga, projeto ou operação
           </h2>
-          <p className="mt-4 max-w-md text-sm leading-relaxed text-muted sm:text-base">
-            Respondo com o que eu faria no recorte. Python, custo operacional, planilha que não fecha.
-          </p>
-          <ul className="mt-8 space-y-2 text-sm text-fg-soft">
-            <li>Diagnóstico de hora extra, custo e planilha de operação.</li>
-            <li>Automação de relatório em Python — CSV entra, tese sai.</li>
-            <li>Porto Alegre · remoto no Brasil</li>
+          <p className="mx-auto mt-3 max-w-md text-sm text-muted">
+            Porto Alegre · remoto · {" "}
             {hasWhatsapp() && directWa ? (
-              <li>
-                <a
-                  className="underline decoration-line underline-offset-4 hover:text-fg"
-                  href={directWa}
-                  target="_blank"
-                  rel="noreferrer"
-                >
-                  WhatsApp
-                </a>
-              </li>
-            ) : null}
-            <li>
-              <a
-                className="underline decoration-line underline-offset-4 hover:text-fg"
-                href={`mailto:${brand.email}`}
-              >
-                {brand.email}
+              <a className="text-fg-soft underline underline-offset-4 hover:text-fg" href={directWa} target="_blank" rel="noreferrer">
+                WhatsApp
               </a>
-            </li>
-          </ul>
+            ) : null}
+            {" · "}
+            <a className="text-fg-soft underline underline-offset-4 hover:text-fg" href={`mailto:${brand.email}`}>
+              E-mail
+            </a>
+          </p>
         </div>
 
         {result ? (
-          <div className="rounded-xl border border-line bg-bg-elevated p-6 sm:p-8">
-            <p className="text-micro text-muted uppercase">Recebido</p>
-            <h3 className="font-display mt-3 text-xl font-semibold text-fg">Recebi.</h3>
-            <p className="mt-3 text-sm leading-relaxed text-muted">
-              Te retorno em breve. Se quiser, chama no WhatsApp.
-            </p>
+          <div className="mt-8 rounded-2xl border border-line bg-bg-elevated p-6 text-center">
+            <p className="font-display text-lg font-semibold text-fg">Recebi.</p>
+            <p className="mt-2 text-sm text-muted">Te retorno em breve.</p>
             {result.wa ? (
-              <Button asChild className="mt-8 w-full sm:w-auto">
+              <Button asChild className="mt-5">
                 <a href={result.wa} target="_blank" rel="noreferrer">
-                  Falar no WhatsApp
+                  WhatsApp
                 </a>
               </Button>
             ) : null}
-            <Button type="button" variant="quiet" className="mt-6" onClick={() => setResult(null)}>
+            <Button type="button" variant="quiet" className="mt-3" onClick={() => setResult(null)}>
               Enviar outro
             </Button>
           </div>
         ) : (
-          <form onSubmit={onSubmit} className="rounded-xl border border-line bg-bg-elevated p-6 sm:p-8">
-            <div className="grid gap-5 sm:grid-cols-2">
+          <form onSubmit={onSubmit} className="mt-8 rounded-2xl border border-line bg-bg-elevated p-5 sm:p-6">
+            <div className="grid gap-4 sm:grid-cols-2">
               <Field label="Nome" htmlFor="name">
                 <Input id="name" name="name" required autoComplete="name" placeholder="Seu nome" />
               </Field>
               <Field label="E-mail" htmlFor="email">
-                <Input
-                  id="email"
-                  name="email"
-                  type="email"
-                  required
-                  autoComplete="email"
-                  inputMode="email"
-                  placeholder="voce@empresa.com"
-                />
+                <Input id="email" name="email" type="email" required autoComplete="email" placeholder="voce@empresa.com" />
               </Field>
-            </div>
-            <div className="mt-5 grid gap-5 sm:grid-cols-2">
               <Field label="Empresa" htmlFor="company">
-                <Input
-                  id="company"
-                  name="company"
-                  autoComplete="organization"
-                  placeholder="Opcional"
-                />
+                <Input id="company" name="company" autoComplete="organization" placeholder="Opcional" />
               </Field>
               <Field label="WhatsApp" htmlFor="phone">
-                <Input
-                  id="phone"
-                  name="phone"
-                  type="tel"
-                  inputMode="tel"
-                  autoComplete="tel"
-                  placeholder="51 99999-9999"
-                />
+                <Input id="phone" name="phone" type="tel" inputMode="tel" placeholder="51 99999-9999" />
               </Field>
             </div>
-            <div className="mt-5">
+            <div className="mt-4">
               <Field label="Mensagem" htmlFor="message">
-                <Textarea
-                  id="message"
-                  name="message"
-                  required
-                  minLength={2}
-                  placeholder="Vaga, processo ou o que precisa olhar."
-                />
+                <Textarea id="message" name="message" required minLength={2} placeholder="O que precisa olhar." />
               </Field>
             </div>
-            <div className="mt-8 flex flex-col gap-3 sm:flex-row sm:items-center">
+            <div className="mt-5 flex flex-col gap-2 sm:flex-row">
               <Button type="submit" className="w-full sm:w-auto" disabled={pending}>
                 {pending ? "Enviando…" : "Enviar"}
               </Button>
@@ -216,17 +161,9 @@ export function Contact() {
   );
 }
 
-function Field({
-  label,
-  htmlFor,
-  children,
-}: {
-  label: string;
-  htmlFor: string;
-  children: ReactNode;
-}) {
+function Field({ label, htmlFor, children }: { label: string; htmlFor: string; children: ReactNode }) {
   return (
-    <div className="flex flex-col gap-2">
+    <div className="flex flex-col gap-1.5">
       <Label htmlFor={htmlFor}>{label}</Label>
       {children}
     </div>

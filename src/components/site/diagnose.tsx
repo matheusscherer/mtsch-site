@@ -17,8 +17,6 @@ const options = [
   {
     id: "hora-extra" as const,
     title: "Hora extra",
-    pain: "Extra alta sem saber se é demanda ou falta de gente",
-    deliver: "Causa, custo puro vs faturável e prioridade de ação",
     href: "/hora-extra",
     external: false,
     icon: Timer,
@@ -28,8 +26,6 @@ const options = [
   {
     id: "estoque" as const,
     title: "Estoque",
-    pain: "Capital parado e ruptura ao mesmo tempo",
-    deliver: "Excesso em R$, SKUs críticos e ruptura com demanda",
     href: "https://github.com/matheusscherer/diagnostico-estoque",
     external: true,
     icon: Package,
@@ -39,8 +35,6 @@ const options = [
   {
     id: "no-show" as const,
     title: "No-show",
-    pain: "Agenda fura e a receita não entra",
-    deliver: "Receita perdida, ociosidade e onde recuperar",
     href: "https://github.com/matheusscherer/diagnostico-no-show",
     external: true,
     icon: UserX,
@@ -50,8 +44,6 @@ const options = [
   {
     id: "retrabalho" as const,
     title: "Retrabalho",
-    pain: "Produz duas vezes e o faturamento não acompanha",
-    deliver: "Custo direto, oportunidade, FPY e causa-raiz",
     href: "https://github.com/matheusscherer/diagnostico-retrabalho",
     external: true,
     icon: ClipboardList,
@@ -60,9 +52,7 @@ const options = [
   },
   {
     id: "rotas" as const,
-    title: "Combustível e rotas",
-    pain: "Frota roda demais e fica parada sem entregar",
-    deliver: "Km extras, custo do desvio e ociosidade",
+    title: "Rotas",
     href: "https://github.com/matheusscherer/diagnostico-combustivel-rotas",
     external: true,
     icon: Fuel,
@@ -81,173 +71,90 @@ export function Diagnose() {
   const ex = current.example;
 
   return (
-    <section id="diagnostico" className="scroll-mt-24 border-y border-line bg-bg-elevated px-5 py-20 sm:px-6 sm:py-24">
-      <div className="mx-auto max-w-6xl">
-        <div className="max-w-2xl">
-          <p className="text-micro text-muted uppercase">Oferta</p>
-          <h2 className="font-display mt-3 text-title font-semibold text-fg">
-            Faça seu diagnóstico
+    <section id="diagnostico" className="scroll-mt-24 border-t border-line px-5 py-14 sm:px-6 sm:py-16">
+      <div className="mx-auto max-w-3xl">
+        <div className="text-center">
+          <p className="text-xs tracking-wide text-muted">Diagnósticos</p>
+          <h2 className="font-display mt-2 text-2xl font-semibold tracking-tight text-fg sm:text-3xl">
+            Escolha a dor
           </h2>
-          <p className="mt-4 text-sm leading-relaxed text-muted sm:text-base">
-            Escolha a dor. Eu peço a planilha que a operação já tem e devolvo números de
-            dinheiro + prioridade. Abaixo: um case real e quatro exemplos rodados com os scripts abertos.
-          </p>
         </div>
 
-        <div className="mt-10 grid gap-3 lg:grid-cols-12">
-          <div className="flex flex-col gap-2 lg:col-span-5">
-            {options.map((opt) => {
-              const active = opt.id === selected;
-              return (
-                <button
-                  key={opt.id}
-                  type="button"
-                  onClick={() => setSelected(opt.id)}
-                  className={`flex items-start gap-3 rounded-xl border px-4 py-3.5 text-left transition-colors ${
-                    active
-                      ? "border-line-strong bg-bg"
-                      : "border-line bg-transparent hover:border-line-strong"
-                  }`}
-                >
-                  <opt.icon
-                    className={`mt-0.5 size-4 shrink-0 ${active ? "text-fg" : "text-muted"}`}
-                    strokeWidth={1.5}
-                  />
-                  <div className="min-w-0">
-                    <div className="flex flex-wrap items-center gap-2">
-                      <p className={`text-sm font-medium ${active ? "text-fg" : "text-fg-soft"}`}>
-                        {opt.title}
-                      </p>
-                      <span className="text-micro text-muted">
-                        {opt.example.kind === "real" ? "REAL" : "EXEMPLO"}
-                      </span>
-                    </div>
-                    <p className="mt-0.5 text-xs leading-relaxed text-muted">{opt.pain}</p>
-                  </div>
-                </button>
-              );
-            })}
-          </div>
-
-          <div className="flex flex-col rounded-xl border border-line bg-bg p-6 sm:p-8 lg:col-span-7">
-            <div className="flex flex-wrap items-center justify-between gap-3">
-              <p className="text-micro text-muted uppercase">{ex.label}</p>
-              <current.icon className="size-5 text-muted" strokeWidth={1.5} />
-            </div>
-            <h3 className="font-display mt-3 text-2xl font-semibold text-fg">{current.title}</h3>
-            <p className="mt-2 text-sm leading-relaxed text-fg-soft">{current.deliver}</p>
-
-            <div className="mt-6 grid grid-cols-3 gap-2">
-              {ex.metrics.map((m) => (
-                <div
-                  key={m.label}
-                  className="rounded-lg border border-line bg-bg-elevated px-3 py-3"
-                >
-                  <p className="text-micro text-muted uppercase">{m.label}</p>
-                  <p className="font-display mt-1.5 text-base font-semibold tabular-nums text-fg sm:text-lg">
-                    {m.value}
-                  </p>
-                </div>
-              ))}
-            </div>
-
-            <p className="mt-4 rounded-lg border border-line bg-bg-elevated px-4 py-3 text-sm text-fg-soft">
-              {ex.highlight}
-            </p>
-
-            <ul className="mt-6 space-y-2 text-sm text-muted">
-              <li className="flex gap-2">
-                <span className="text-fg">1.</span>
-                Você envia a planilha (CSV/Excel) ou recorte anonimizado
-              </li>
-              <li className="flex gap-2">
-                <span className="text-fg">2.</span>
-                Eu devolvo diagnóstico com dinheiro e lista de ação
-              </li>
-              <li className="flex gap-2">
-                <span className="text-fg">3.</span>
-                Se fizer sentido, automatizo o relatório com Python
-              </li>
-            </ul>
-
-            <div className="mt-8 flex flex-col gap-3 sm:flex-row">
-              {wa ? (
-                <Button asChild size="lg">
-                  <a href={wa} target="_blank" rel="noreferrer">
-                    Pedir este diagnóstico
-                    <ArrowRight className="size-4" />
-                  </a>
-                </Button>
-              ) : null}
-              {current.external ? (
-                <Button asChild size="lg" variant="quiet">
-                  <a href={current.href} target="_blank" rel="noreferrer">
-                    Ver código
-                    <ArrowUpRight className="size-4" />
-                  </a>
-                </Button>
-              ) : (
-                <Button asChild size="lg" variant="quiet">
-                  <Link to={current.href}>
-                    Ver dashboard do case
-                    <ArrowUpRight className="size-4" />
-                  </Link>
-                </Button>
-              )}
-            </div>
-          </div>
+        {/* Chips */}
+        <div className="mt-8 flex flex-wrap justify-center gap-2">
+          {options.map((opt) => {
+            const active = opt.id === selected;
+            return (
+              <button
+                key={opt.id}
+                type="button"
+                onClick={() => setSelected(opt.id)}
+                className={`inline-flex items-center gap-1.5 rounded-full border px-3.5 py-2 text-sm transition-colors ${
+                  active
+                    ? "border-fg bg-fg text-bg"
+                    : "border-line text-fg-soft hover:border-line-strong hover:text-fg"
+                }`}
+              >
+                <opt.icon className="size-3.5" strokeWidth={1.75} />
+                {opt.title}
+              </button>
+            );
+          })}
         </div>
 
-        <div className="mt-14">
-          <p className="text-micro text-muted uppercase">Exemplos com números</p>
-          <div className="mt-4 grid gap-3 sm:grid-cols-2 lg:grid-cols-5">
-            {options.map((opt) => {
-              const card = (
-                <>
-                  <div className="flex items-center justify-between gap-2">
-                    <opt.icon className="size-4 text-muted" strokeWidth={1.5} />
-                    <span className="text-micro text-muted">
-                      {opt.example.kind === "real" ? "REAL" : "EXEMPLO"}
-                    </span>
-                  </div>
-                  <p className="mt-3 text-sm font-medium text-fg">{opt.title}</p>
-                  <p className="mt-2 font-display text-lg font-semibold tabular-nums text-fg">
-                    {opt.example.metrics[0].value}
-                  </p>
-                  <p className="mt-1 text-xs text-muted">{opt.example.metrics[0].label}</p>
-                  <p className="mt-3 text-xs leading-relaxed text-fg-soft">{opt.example.highlight}</p>
-                </>
-              );
+        {/* Panel */}
+        <div className="mt-6 rounded-2xl border border-line bg-bg-elevated p-5 sm:p-7">
+          <div className="flex items-center justify-between gap-3">
+            <div>
+              <p className="text-[11px] tracking-wide text-muted uppercase">{ex.label}</p>
+              <h3 className="font-display mt-1 text-xl font-semibold text-fg">{current.title}</h3>
+            </div>
+            <current.icon className="size-5 text-muted" strokeWidth={1.5} />
+          </div>
 
-              if (opt.external) {
-                return (
-                  <a
-                    key={opt.id}
-                    href={opt.href}
-                    target="_blank"
-                    rel="noreferrer"
-                    className="group flex flex-col rounded-xl border border-line bg-bg p-4 transition-colors hover:border-line-strong"
-                  >
-                    {card}
-                  </a>
-                );
-              }
+          <div className="mt-5 grid grid-cols-3 gap-2">
+            {ex.metrics.map((m) => (
+              <div key={m.label} className="rounded-xl border border-line bg-bg px-2.5 py-3">
+                <p className="font-display text-base font-semibold tabular-nums text-fg sm:text-lg">
+                  {m.value}
+                </p>
+                <p className="mt-1 text-[10px] leading-snug text-muted sm:text-[11px]">{m.label}</p>
+              </div>
+            ))}
+          </div>
 
-              return (
-                <Link
-                  key={opt.id}
-                  to={opt.href}
-                  className="group flex flex-col rounded-xl border border-line bg-bg p-4 transition-colors hover:border-line-strong"
-                >
-                  {card}
+          <p className="mt-4 text-sm leading-relaxed text-fg-soft">{ex.highlight}</p>
+
+          <div className="mt-6 flex flex-col gap-2.5 sm:flex-row">
+            {wa ? (
+              <Button asChild className="w-full sm:w-auto">
+                <a href={wa} target="_blank" rel="noreferrer">
+                  Pedir diagnóstico
+                  <ArrowRight className="size-4" />
+                </a>
+              </Button>
+            ) : null}
+            {current.external ? (
+              <Button asChild variant="quiet" className="w-full sm:w-auto">
+                <a href={current.href} target="_blank" rel="noreferrer">
+                  Código
+                  <ArrowUpRight className="size-4" />
+                </a>
+              </Button>
+            ) : (
+              <Button asChild variant="quiet" className="w-full sm:w-auto">
+                <Link to={current.href}>
+                  Dashboard
+                  <ArrowUpRight className="size-4" />
                 </Link>
-              );
-            })}
+              </Button>
+            )}
           </div>
-          <p className="mt-4 text-xs text-muted">
-            Hora extra = operação real. Demais = outputs gerados pelos repositórios públicos com base de exemplo.
-          </p>
         </div>
+
+        <p className="mt-4 text-center text-[11px] text-muted">
+          Hora extra = case real. Demais = outputs dos repositórios públicos.
+        </p>
       </div>
     </section>
   );
