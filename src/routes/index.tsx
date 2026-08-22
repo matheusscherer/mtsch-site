@@ -1,7 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { Header } from "@/components/site/header";
 import { Hero } from "@/components/site/hero";
-import { Diagnose } from "@/components/site/diagnose";
+import { DataReel } from "@/components/site/data-reel";
 import { Contact } from "@/components/site/contact";
 import { Footer } from "@/components/site/footer";
 
@@ -13,7 +13,7 @@ function Home() {
       <Header />
       <main className="w-full max-w-full overflow-x-clip">
         <Hero />
-        <Diagnose />
+        <DataReel />
         <Contact />
       </main>
       <Footer />

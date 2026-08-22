@@ -99,13 +99,51 @@
 @keyframes rise-in {
   from {
     opacity: 0;
-    transform: translateY(var(--motion-y-medium, 12px));
-    filter: blur(2px);
+    transform: translateY(12px);
   }
   to {
     opacity: 1;
     transform: none;
-    filter: none;
+  }
+}
+
+@keyframes ticker-x {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-50%);
+  }
+}
+
+@keyframes bar-grow {
+  from {
+    transform: scaleX(0);
+  }
+  to {
+    transform: scaleX(1);
+  }
+}
+
+@keyframes spark-up {
+  from {
+    transform: scaleY(0.2);
+    opacity: 0.3;
+  }
+  to {
+    transform: scaleY(1);
+    opacity: 1;
+  }
+}
+
+@keyframes card-in {
+  from {
+    opacity: 0;
+    transform: translateY(16px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
   }
 }
 
@@ -113,12 +151,34 @@
   animation: rise-in 700ms var(--ease-smooth-out) both;
 }
 
+.ticker-track {
+  animation: ticker-x 28s linear infinite;
+}
+
+.bar-fill {
+  transform-origin: left center;
+  animation: bar-grow 900ms var(--ease-smooth-out) both;
+}
+
+.spark-bar {
+  transform-origin: bottom center;
+  animation: spark-up 700ms var(--ease-smooth-out) both;
+}
+
+.project-card {
+  animation: card-in 600ms var(--ease-smooth-out) both;
+}
+
 @media (prefers-reduced-motion: reduce) {
   html {
     scroll-behavior: auto;
   }
 
-  .rise-in {
-    animation: none;
+  .rise-in,
+  .ticker-track,
+  .bar-fill,
+  .spark-bar,
+  .project-card {
+    animation: none !important;
   }
 }
