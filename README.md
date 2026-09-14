@@ -48,4 +48,16 @@ TanStack Start · React · Tailwind · Recharts · Vercel
 
 ---
 
+## Agentes / Git
+
+Qualquer mudança segue [`AGENTS.md`](./AGENTS.md):
+
+```text
+Issue → branch → PR (Closes #N) → merge → deploy
+```
+
+Não commitar direto em `main`.
+
+---
+
 **Contato:** [LinkedIn](https://linkedin.com/in/scherermatheus) · contatomatheusscherer@gmail.com
